@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Interaktif Solat Jenazah - Tahun 6</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .font-arabic {
+            font-family: 'Amiri', serif;
+            line-height: 2.2;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .active-tab {
+            background-color: #059669 !important;
+            color: #ffffff !important;
+            border-color: #10b981 !important;
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #059669;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar">
+
+    <!-- HEADER / NAVBAR -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50 shadow-xl">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-emerald-600/30">
+                    <i class="fa-solid fa-kaaba"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-emerald-400">Nota Interaktif Solat Jenazah</h1>
+                    <p class="text-xs text-slate-400">Pendidikan Islam KSSR Tahun 6 (Bidang Ibadah)</p>
+                </div>
+            </div>
+
+            <!-- Quick Navigation Badges -->
+            <div class="flex items-center gap-2 text-xs font-semibold">
+                <span class="px-3 py-1.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">
+                    <i class="fa-solid fa-book-open mr-1"></i> Fardhu Kifayah
+                </span>
+                <span class="px-3 py-1.5 rounded-full bg-amber-950 text-amber-400 border border-amber-800">
+                    <i class="fa-solid fa-hands-praying mr-1"></i> 4 Takbir
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-5xl mx-auto px-4 py-6 w-full flex-1">
+
+        <!-- NAVIGATION TABS -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-8 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
+            <button onclick="switchTab('tabAsas')" id="btnTabAsas" class="tab-btn active-tab py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 border border-transparent">
+                <i class="fa-solid fa-circle-info"></i> Asas & Hukum
+            </button>
+            <button onclick="switchTab('tabKedudukan')" id="btnTabKedudukan" class="tab-btn py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 border border-transparent">
+                <i class="fa-solid fa-people-arrows"></i> Kedudukan Imam
+            </button>
+            <button onclick="switchTab('tabTakbir')" id="btnTabTakbir" class="tab-btn py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 border border-transparent">
+                <i class="fa-solid fa-list-ol"></i> Panduan 4 Takbir
+            </button>
+            <button onclick="switchTab('tabKuiz')" id="btnTabKuiz" class="tab-btn py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 border border-transparent">
+                <i class="fa-solid fa-gamepad"></i> Kuiz Uji Minda
+            </button>
+        </div>
+
+        <!-- SECTION 1: ASAS & HUKUM SOLAT JENAZAH -->
+        <section id="tabAsas" class="tab-content space-y-6">
+            <!-- Hero Definition Card -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 text-slate-800/30 text-9xl font-black pointer-events-none">
+                    <i class="fa-solid fa-mosque"></i>
+                </div>
+
+                <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold rounded-full uppercase tracking-wider">
+                    Maksud & Hukum
+                </span>
+
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-3 mb-4">Apakah Solat Jenazah?</h2>
+                
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+                    Solat Jenazah ialah solat yang dilakukan oleh orang Islam yang hidup terhadap orang Islam yang telah meninggal dunia (kecuali mati syahid perang). Solat ini <strong class="text-amber-400">TIDAK MENGANDUNGI RUKU' DAN SUJUD</strong>, sebaliknya hanya mempunya <strong>4 TAKBIR</strong> dalam keadaan berdiri.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-700/60">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fa-solid fa-scale-balanced text-amber-400 text-xl"></i>
+                            <h3 class="font-bold text-white text-sm">Hukum Solat Jenazah</h3>
+                        </div>
+                        <p class="text-xs text-slate-300">
+                            <strong class="text-amber-300 text-sm">Fardhu Kifayah</strong><br>
+                            Jika sebahagian umat Islam telah menunaikannya, maka gugurlah kewajipan ke atas umat Islam yang lain dalam kariah tersebut.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-700/60">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fa-solid fa-heart-pulse text-emerald-400 text-xl"></i>
+                            <h3 class="font-bold text-white text-sm">Keutamaan Solat Jenazah</h3>
+                        </div>
+                        <p class="text-xs text-slate-300">
+                            Mendapat ganjaran pahala sebesar <strong class="text-emerald-300">Dua Qirat</strong> (sebesar Gunung Uhud) jika menyolatkan dan mengiringi jenazah hingga dikuburkan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Syarat Sah Solat Jenazah -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8">
+                <h3 class="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check"></i> Syarat Sah Solat Jenazah
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 text-center space-y-2">
+                        <div class="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto text-lg font-bold border border-emerald-500/20">1</div>
+                        <h4 class="font-semibold text-white text-sm">Suci Daripada Hadas</h4>
+                        <p class="text-xs text-slate-400">Menutup aurat, suci badan, pakaian dan tempat daripada najis & berwuduk.</p>
+                    </div>
+
+                    <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 text-center space-y-2">
+                        <div class="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto text-lg font-bold border border-emerald-500/20">2</div>
+                        <h4 class="font-semibold text-white text-sm">Jenazah Dimandikan & Dikafan</h4>
+                        <p class="text-xs text-slate-400">Jenazah mestilah telah disempurnakan mandi dan dikafankan terlebih dahulu.</p>
+                    </div>
+
+                    <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 text-center space-y-2">
+                        <div class="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto text-lg font-bold border border-emerald-500/20">3</div>
+                        <h4 class="font-semibold text-white text-sm">Kedudukan Jenazah</h4>
+                        <p class="text-xs text-slate-400">Jenazah diletakkan di hadapan orang yang menyolatkan (menghadap kiblat).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: KEDUDUKAN IMAM & JENAZAH -->
+        <section id="tabKedudukan" class="tab-content hidden space-y-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-8">
+                <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold rounded-full uppercase tracking-wider">
+                    Ketahuilah Perbezaannya
+                </span>
+                <h2 class="text-2xl font-bold text-white mt-2 mb-2">Kedudukan Imam Berdiri Mengikut Jantina Jenazah</h2>
+                <p class="text-slate-300 text-sm mb-6">Sunnah Nabi SAW menetapkan kedudukan berdiri Imam yang berbeza bagi jenazah lelaki dan perempuan.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Jenazah Lelaki -->
+                    <div class="bg-slate-900 border-2 border-emerald-500/40 rounded-2xl p-6 space-y-4 text-center relative overflow-hidden">
+                        <div class="bg-emerald-500 text-slate-950 font-black text-xs px-3 py-1 rounded-full inline-block uppercase tracking-wider">
+                            1. Jenazah Lelaki (مَيِّت)
+                        </div>
+
+                        <!-- Visual Interactive Graphic -->
+                        <div class="bg-slate-950/80 rounded-xl p-6 border border-slate-800 flex flex-col items-center justify-center space-y-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-amber-400 font-bold text-xs">Arah Kiblat ⬆️</span>
+                            </div>
+                            
+                            <!-- Diagram Representation -->
+                            <div class="relative w-full max-w-xs h-36 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center p-2">
+                                <!-- Jenazah Representation -->
+                                <div class="w-3/4 h-8 bg-slate-800 border border-emerald-400 rounded-full flex items-center justify-between px-3 text-xs text-emerald-300 font-bold shadow-md">
+                                    <span>[ KEPALA ]</span>
+                                    <span>[ JENAZAH LELAKI ]</span>
+                                    <span>[ KAKI ]</span>
+                                </div>
+                                
+                                <!-- Imam Marker -->
+                                <div class="absolute -bottom-3 left-8 bg-amber-400 text-slate-950 font-black text-[10px] px-2.5 py-1 rounded-lg border border-white shadow-lg animate-pulse">
+                                    🧍 IMAM (Berdiri di kepala)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-left space-y-2 text-xs text-slate-300">
+                            <p class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Imam berdiri selari dengan <strong class="text-emerald-300 text-sm">KEPALA JENAZAH</strong>.</p>
+                            <p class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Kepala jenazah berada di sebelah <strong class="text-white">kiri Imam</strong> (mengadap Kiblat).</p>
+                        </div>
+                    </div>
+
+                    <!-- Jenazah Perempuan -->
+                    <div class="bg-slate-900 border-2 border-rose-500/40 rounded-2xl p-6 space-y-4 text-center relative overflow-hidden">
+                        <div class="bg-rose-500 text-slate-950 font-black text-xs px-3 py-1 rounded-full inline-block uppercase tracking-wider">
+                            2. Jenazah Perempuan (مَيِّتَة)
+                        </div>
+
+                        <!-- Visual Interactive Graphic -->
+                        <div class="bg-slate-950/80 rounded-xl p-6 border border-slate-800 flex flex-col items-center justify-center space-y-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-amber-400 font-bold text-xs">Arah Kiblat ⬆️</span>
+                            </div>
+                            
+                            <!-- Diagram Representation -->
+                            <div class="relative w-full max-w-xs h-36 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center p-2">
+                                <!-- Jenazah Representation -->
+                                <div class="w-3/4 h-8 bg-slate-800 border border-rose-400 rounded-full flex items-center justify-between px-3 text-xs text-rose-300 font-bold shadow-md">
+                                    <span>[ KEPALA ]</span>
+                                    <span>[ JENAZAH PEREMPUAN ]</span>
+                                    <span>[ KAKI ]</span>
+                                </div>
+                                
+                                <!-- Imam Marker -->
+                                <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-amber-400 text-slate-950 font-black text-[10px] px-2.5 py-1 rounded-lg border border-white shadow-lg animate-pulse">
+                                    🧍 IMAM (Berdiri di pinggang)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-left space-y-2 text-xs text-slate-300">
+                            <p class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400"></i> Imam berdiri selari dengan <strong class="text-rose-300 text-sm">PINGGANG / TENGAN JENAZAH</strong>.</p>
+                            <p class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-rose-400"></i> Kepala jenazah berada di sebelah <strong class="text-white">kiri Imam</strong> (mengadap Kiblat).</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: PANDUAN 4 TAKBIR (STEP-BY-STEP) -->
+        <section id="tabTakbir" class="tab-content hidden space-y-6">
+            <div class="text-center max-w-2xl mx-auto mb-4">
+                <h2 class="text-2xl font-extrabold text-white">4 Langkah Rukun Solat Jenazah</h2>
+                <p class="text-xs text-slate-400">Tekan setiap Takbir untuk mempelajari niat dan bacaan secara terperinci.</p>
+            </div>
+
+            <!-- STEP 1: TAKBIR PERTAMA -->
+            <div class="glass-card rounded-3xl p-6 border-l-8 border-l-emerald-500 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-sm">1</span>
+                        <h3 class="font-bold text-white text-lg">Takbir Pertama (Niat & Surah Al-Fatihah)</h3>
+                    </div>
+                    <button onclick="speakText('Niat solat jenazah lelaki: Usolli ala hazal mayyiti arba takbiratin fardha kifayatin makmuman lillahi taala')" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-emerald-400 border border-slate-700 flex items-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-volume-high"></i> Sebutan
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <p class="text-xs text-slate-300"><strong>Langkah:</strong> Berniat semasa bertakbiratul ihram (<span class="text-amber-400 font-arabic text-lg">اللَّهُ أَكْبَرُ</span>), kemudian membaca <strong>Surah Al-Fatihah</strong>.</p>
+
+                    <!-- Lafaz Niat Jenazah Lelaki & Perempuan -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-2">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Lafaz Niat (Jenazah Lelaki)</span>
+                            <div class="font-arabic text-xl text-right text-emerald-300">
+                                أُصَلِّي عَلَى هَذَا المَيِّتِ أَرْبَعَ تَكْبِيرَاتٍ فَرْضَ كِفَايَةٍ مَأْمُومًا لِلَّهِ تَعَالَى
+                            </div>
+                            <p class="text-xs text-amber-300 font-medium">Usolli 'alā hāżal-mayyiti arba'a takbīrātin fardha kifāyatin ma'mūman lillāhi ta'ālā.</p>
+                            <p class="text-[11px] text-slate-400 italic">"Sahaja aku solat ke atas jenazah lelaki ini empat takbir fardhu kifayah mengikut imam kerana Allah Taala."</p>
+                        </div>
+
+                        <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-2">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-rose-400">Lafaz Niat (Jenazah Perempuan)</span>
+                            <div class="font-arabic text-xl text-right text-rose-300">
+                                أُصَلِّي عَلَى هَذِهِ المَيِّتَةِ أَرْبَعَ تَكْبِيرَاتٍ فَرْضَ كِفَايَةٍ مَأْمُومًا لِلَّهِ تَعَالَى
+                            </div>
+                            <p class="text-xs text-amber-300 font-medium">Usolli 'alā hāżihil-mayyitati arba'a takbīrātin fardha kifāyatin ma'mūman lillāhi ta'ālā.</p>
+                            <p class="text-[11px] text-slate-400 italic">"Sahaja aku solat ke atas jenazah perempuan ini empat takbir fardhu kifayah mengikut imam kerana Allah Taala."</p>
+                        </div>
+                    </div>
+
+                    <!-- Bacaan Surah Al-Fatihah -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-300"><i class="fa-solid fa-book-quran text-emerald-400 mr-2"></i> Selepas Takbir Pertama, terus baca <strong>Surah Al-Fatihah</strong> hingga selesai.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: TAKBIR KEDUAN -->
+            <div class="glass-card rounded-3xl p-6 border-l-8 border-l-amber-500 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-sm">2</span>
+                        <h3 class="font-bold text-white text-lg">Takbir Kedua (Membaca Selawat)</h3>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <p class="text-xs text-slate-300"><strong>Langkah:</strong> Bertakbir kali kedua (<span class="text-amber-400 font-arabic text-lg">اللَّهُ أَكْبَرُ</span>), kemudian membaca <strong>Selawat ke atas Nabi SAW</strong>.</p>
+
+                    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3">
+                        <div class="font-arabic text-2xl text-right text-amber-300 leading-relaxed">
+                            اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ
+                        </div>
+                        <p class="text-xs text-emerald-400 font-semibold">Allahumma ssolli 'alā Muhammad wa 'alā āli Muhammad.</p>
+                        <p class="text-xs text-slate-400 italic">"Ya Allah, berilah selawat ke atas Nabi Muhammad dan ke atas keluarga Nabi Muhammad."</p>
+                        <p class="text-[10px] text-slate-500">*Boleh dibaca dengan Selawat Ibrahimiyyah yang lebih lengkap.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: TAKBIR KETIGA -->
+            <div class="glass-card rounded-3xl p-6 border-l-8 border-l-blue-500 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-blue-500 text-slate-950 font-black flex items-center justify-center text-sm">3</span>
+                        <h3 class="font-bold text-white text-lg">Takbir Ketiga (Mendoakan Keampunan Jenazah)</h3>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <p class="text-xs text-slate-300"><strong>Langkah:</strong> Bertakbir kali ketiga (<span class="text-amber-400 font-arabic text-lg">اللَّهُ أَكْبَرُ</span>), kemudian membaca <strong>doa khas untuk jenazah</strong>.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-2">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Doa Jenazah Lelaki (لَهُ)</span>
+                            <div class="font-arabic text-xl text-right text-emerald-300">
+                                اللَّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ
+                            </div>
+                            <p class="text-xs text-amber-300 font-medium">Allahummaghfir lahu warhamhu wa 'āfihi wa'fu 'anhu.</p>
+                            <p class="text-[11px] text-slate-400 italic">"Ya Allah, ampunilah dia, rahmatilah dia, sejahterakanlah dia dan maafkanlah dia."</p>
+                        </div>
+
+                        <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-2">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-rose-400">Doa Jenazah Perempuan (لَهَا)</span>
+                            <div class="font-arabic text-xl text-right text-rose-300">
+                                اللَّهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا
+                            </div>
+                            <p class="text-xs text-amber-300 font-medium">Allahummaghfir lahā warhamhā wa 'āfihā wa'fu 'anhā.</p>
+                            <p class="text-[11px] text-slate-400 italic">"Ya Allah, ampunilah dia (perempuan), rahmatilah dia, sejahterakanlah dia dan maafkanlah dia."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4: TAKBIR KEEMPAT & SALAM -->
+            <div class="glass-card rounded-3xl p-6 border-l-8 border-l-purple-500 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-purple-500 text-slate-950 font-black flex items-center justify-center text-sm">4</span>
+                        <h3 class="font-bold text-white text-lg">Takbir Keempat & Salam</h3>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <p class="text-xs text-slate-300"><strong>Langkah:</strong> Bertakbir kali keempat (<span class="text-amber-400 font-arabic text-lg">اللَّهُ أَكْبَرُ</span>), disunatkan membaca doa berikut sebelum <strong>memberi salam</strong>:</p>
+
+                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-2">
+                        <div class="font-arabic text-xl text-right text-purple-300">
+                            اللَّهُمَّ لاَ تَحْرِمْنَا أَجْرَهُ وَلاَ تَفْتِنَّا بَعْدَهُ وَاغْفِرْ لَنَا وَلَهُ
+                        </div>
+                        <p class="text-xs text-amber-300 font-medium">Allahumma lā tahrimnā ajrahu walā taftinnā ba'dahu waghfir lanā walahu.</p>
+                        <p class="text-[11px] text-slate-400 italic">"Ya Allah, janganlah Engkau halangkan kami daripada mendapat pahalanya dan janganlah Engkau fitnahkan kami selepas ketiadaannya, dan ampunilah kami dan ampunilah dia."</p>
+                    </div>
+
+                    <!-- Memberi Salam -->
+                    <div class="bg-emerald-950/60 p-4 rounded-xl border border-emerald-800/80 flex items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-emerald-400 text-sm">Memberi Salam (Ke Kanan & Ke Kiri)</h4>
+                            <p class="text-xs text-slate-300 font-arabic text-lg mt-1">السَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ</p>
+                        </div>
+                        <i class="fa-solid fa-circle-check text-emerald-400 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: KUIZ INTERAKTIF UJI MINDA -->
+        <section id="tabKuiz" class="tab-content hidden space-y-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Kuiz Interaktif Solat Jenazah</h2>
+                        <p class="text-xs text-slate-400">Jawab 5 soalan di bawah untuk menguji kefahaman anda.</p>
+                    </div>
+                    <span id="quizScoreBadge" class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-full">
+                        Skor: <span id="currentScore">0</span> / 5
+                    </span>
+                </div>
+
+                <!-- Quiz Form Container -->
+                <div id="quizContainer" class="space-y-6">
+                    <!-- Dynamic Question Rendering -->
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                    <button onclick="submitQuiz()" class="py-3 px-8 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-sm transition-all shadow-lg shadow-emerald-500/20">
+                        Hantar Jawapan <i class="fa-solid fa-paper-plane ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+        <div class="max-w-5xl mx-auto px-4 space-y-1">
+            <p>Modul Nota Interaktif Pendidikan Islam Tahun 6 • Tajuk: Solat Jenazah</p>
+            <p class="text-[10px] text-slate-600">Direka khas untuk pdpc interaktif murid-murid Sekolah Rendah (KSSR Semakan)</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Tab Switching Function
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active-tab'));
+
+            document.getElementById(tabId).classList.remove('hidden');
+
+            const activeBtnMap = {
+                'tabAsas': 'btnTabAsas',
+                'tabKedudukan': 'btnTabKedudukan',
+                'tabTakbir': 'btnTabTakbir',
+                'tabKuiz': 'btnTabKuiz'
+            };
+
+            document.getElementById(activeBtnMap[tabId]).classList.add('active-tab');
+        }
+
+        // Text To Speech helper for Arabic / Malay pronunciation
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ms-MY';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Fungsi suara tidak disokong pada pelayar ini.');
+            }
+        }
+
+        // Quiz Questions Data
+        const quizQuestions = [
+            {
+                q: "1. Apakah hukum menunaikan Solat Jenazah bagi umat Islam?",
+                options: ["Sunat Muakkad", "Fardhu Kifayah", "Fardhu Ain", "Harus"],
+                answer: 1
+            },
+            {
+                q: "2. Berapakah jumlah takbir dalam Solat Jenazah?",
+                options: ["3 Takbir", "4 Takbir", "7 Takbir", "12 Takbir"],
+                answer: 1
+            },
+            {
+                q: "3. Di manakah kedudukan berdiri Imam bagi Jenazah Lelaki?",
+                options: ["Selari dengan pinggang jenazah", "Selari dengan kaki jenazah", "Selari dengan kepala jenazah", "Di belakang jenazah"],
+                answer: 2
+            },
+            {
+                q: "4. Surah apakah yang wajib dibaca selepas Takbir Pertama?",
+                options: ["Surah Al-Ikhlas", "Surah Al-Fatihah", "Surah Yasin", "Ayat Kursi"],
+                answer: 1
+            },
+            {
+                q: "5. Apakah bacaan utama selepas Takbir Kedua?",
+                options: ["Membaca Doa Keampunan", "Membaca Surah Pendek", "Membaca Selawat ke atas Nabi", "Memberi Salam"],
+                answer: 2
+            }
+        ];
+
+        let userAnswers = {};
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizQuestions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-3";
+
+                let optionsHTML = '';
+                item.options.forEach((opt, optIdx) => {
+                    optionsHTML += `
+                        <label class="flex items-center gap-3 p-3 bg-slate-800/60 rounded-xl hover:bg-slate-800 cursor-pointer text-xs text-slate-200 transition-all border border-slate-700/50">
+                            <input type="radio" name="q_${index}" value="${optIdx}" onchange="selectAnswer(${index}, ${optIdx})" class="accent-emerald-500 w-4 h-4">
+                            <span>${opt}</span>
+                        </label>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-semibold text-white text-sm">${item.q}</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                        ${optionsHTML}
+                    </div>
+                `;
+
+                container.appendChild(qDiv);
+            });
+        }
+
+        function selectAnswer(qIdx, optIdx) {
+            userAnswers[qIdx] = optIdx;
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            quizQuestions.forEach((item, idx) => {
+                if (userAnswers[idx] === item.answer) {
+                    score++;
+                }
+            });
+
+            document.getElementById('currentScore').textContent = score;
+
+            if (score === 5) {
+                alert(`Tahniah! Anda mendapat markah Penuh: ${score} / 5 🎉`);
+            } else {
+                alert(`Anda mendapat markah: ${score} / 5. Sila ulang kaji nota untuk jawapan sempurna!`);
+            }
+        }
+
+        // Initialize Quiz on load
+        window.onload = function() {
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Sirah: Perjalanan Dakwah Nabi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdf4; /* Light green background */
+            background-image: radial-gradient(#dcfce7 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
+        .jawi-text {
+            font-family: 'Amiri', serif;
+            direction: rtl;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bounce-in {
+            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div id="app" class="w-full max-w-2xl bg-white rounded-3xl shadow-xl overflow-hidden relative">
+        <!-- Header -->
+        <div class="bg-emerald-600 p-6 text-center text-white">
+            <h1 class="text-3xl font-bold mb-2">Jejak Dakwah Rasulullah ﷺ</h1>
+            <p class="text-emerald-100 text-sm">Pendidikan Islam Tahun 4 - Sirah</p>
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="content-area" class="p-6 md:p-8 min-h-[400px] flex flex-col justify-center">
+            <!-- Dynamic content will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        // Data Soalan berdasarkan nota yang diberikan
+        const stages = [
+            {
+                title: "Peringkat 1: Pengertian Dakwah",
+                narrative: "Sebelum memulakan perjalanan, kamu perlu faham apa itu 'Dakwah'. Terdapat pihak yang salah faham menyangka dakwah adalah mengajak manusia kepada keseronokan dunia semata-mata.",
+                question: "Adakah dakwah bermaksud menyeru dan mengajak umat manusia kepada dunia?",
+                options: [
+                    { text: "Ya, menyeru kepada dunia", isCorrect: false },
+                    { text: "Tidak, dakwah adalah menyeru kepada Allah", isCorrect: true }
+                ],
+                explanation: "Betul! Dakwah bermaksud menyeru dan mengajak umat manusia beriman kepada Allah, bukan kepada dunia."
+            },
+            {
+                title: "Peringkat 2: Permulaan Wahyu",
+                narrative: "Setelah menerima wahyu, Baginda Nabi Muhammad SAW mula menjalankan perintah Allah untuk menyebarkan Islam kepada masyarakat.",
+                question: "Bagaimanakah cara Nabi Muhammad SAW berdakwah pada permulaannya?",
+                options: [
+                    { text: "Secara Terang-terangan (Terbuka)", isCorrect: false },
+                    { text: "Secara Sulit (Rahsia)", isCorrect: true }
+                ],
+                explanation: "Tepat sekali! Pada permulaannya, Nabi SAW berdakwah secara sulit untuk membina asas akidah yang kuat."
+            },
+            {
+                title: "Peringkat 3: Pusat Dakwah Sulit",
+                narrative: "Nabi memerlukan satu tempat yang selamat untuk mengumpulkan para sahabat dan mengajarkan ajaran Islam tanpa disedari oleh musuh.",
+                question: "Di manakah Nabi berdakwah secara sulit bersama para sahabat?",
+                options: [
+                    { text: "Di rumah Abu Bakar As-Siddiq", isCorrect: false },
+                    { text: "Di rumah Al-Arqam bin Abi Al-Arqam", isCorrect: true }
+                ],
+                explanation: "Alhamdulillah! Nabi berdakwah secara sulit di rumah Al-Arqam bin Abi Al-Arqam, bukan di rumah Abu Bakar."
+            },
+            {
+                title: "Peringkat 4: Tempoh Berdakwah",
+                narrative: "Pergerakan secara rahsia ini memerlukan kesabaran yang tinggi. Golongan terawal memeluk Islam dididik secara langsung oleh Baginda.",
+                question: "Berapa lamakah Nabi Muhammad SAW berdakwah secara sulit?",
+                options: [
+                    { text: "Selama Tiga Tahun", isCorrect: true },
+                    { text: "Selama Sepuluh Tahun", isCorrect: false }
+                ],
+                explanation: "Syabas! Dakwah secara sulit mengambil masa selama 3 tahun sebelum perintah berdakwah terang-terangan diturunkan."
+            },
+            {
+                title: "Peringkat 5: Tentangan Musyrikin",
+                narrative: "Apabila dakwah mula dijalankan secara terang-terangan, orang Musyrikin Quraisy berasa marah dan mula menentang Baginda.",
+                question: "Apakah tuduhan jahat orang Quraisy terhadap Nabi Muhammad SAW?",
+                options: [
+                    { text: "Sebagai gila, ahli sihir dan pendusta", isCorrect: true },
+                    { text: "Sebagai seorang yang sangat amanah", isCorrect: false }
+                ],
+                explanation: "Betul. Orang Quraisy menuduh nabi sebagai gila, ahli sihir dan pendusta untuk menghalang orang ramai dari mendengar dakwah."
+            },
+            {
+                title: "Peringkat 6: Pengorbanan Sahabat",
+                narrative: "Bukan sahaja Nabi, malah para sahabat turut diseksa dengan teruk kerana mempertahankan kalimah tauhid.",
+                question: "Siapakah sahabat yang diseksa dengan diletakkan batu besar di atas dada di tengah panas?",
+                options: [
+                    { text: "Saidina Yassir", isCorrect: false },
+                    { text: "Saidina Bilal bin Rabah", isCorrect: true }
+                ],
+                explanation: "Tepat! Sahabat yang diseksa dengan batu besar di atas dada ialah Saidina Bilal bin Rabah. Walaupun diseksa, beliau tetap melaungkan 'Ahad, Ahad' (Allah Maha Esa)."
+            },
+            {
+                title: "Peringkat 7: Ketabahan Baginda",
+                narrative: "Pelbagai rintangan, cacian, dan halangan fizikal telah dilalui oleh Rasulullah SAW dalam perjalanan dakwah Baginda.",
+                question: "Adakah Nabi Muhammad SAW pernah berputus asa dalam berdakwah?",
+                options: [
+                    { text: "Ya, Baginda pernah berehat panjang", isCorrect: false },
+                    { text: "Tidak, Baginda tidak pernah berputus asa", isCorrect: true }
+                ],
+                explanation: "Alhamdulillah! Baginda Nabi Muhammad SAW tidak pernah berputus asa dalam berdakwah. Sifat ini wajib kita contohi."
+            }
+        ];
+
+        let state = {
+            playerName: '',
+            currentStage: 0,
+            hasStarted: false
+        };
+
+        const contentArea = document.getElementById('content-area');
+
+        // Fungsi memaparkan antara muka mengikut state
+        function render() {
+            if (!state.hasStarted) {
+                renderWelcomeScreen();
+            } else if (state.currentStage < stages.length) {
+                renderStageScreen();
+            } else {
+                renderCompletionScreen();
+            }
+        }
+
+        function renderWelcomeScreen() {
+            contentArea.innerHTML = `
+                <div class="text-center fade-in">
+                    <div class="mb-6 flex justify-center">
+                        <div class="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center text-4xl shadow-inner">
+                            🕌
+                        </div>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Selamat Datang, Pendakwah Cilik!</h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Mari kita menghayati sirah perjuangan dan ketabahan Nabi Muhammad ﷺ dan para sahabat dalam menyampaikan Islam. 
+                        Sila masukkan nama kamu untuk mulakan pengembaraan.
+                    </p>
+                    <div class="max-w-xs mx-auto">
+                        <input type="text" id="playerNameInput" placeholder="Nama Anda..." 
+                            class="w-full px-4 py-3 rounded-xl border-2 border-emerald-200 focus:border-emerald-500 focus:outline-none mb-4 text-center text-lg font-semibold text-gray-700 shadow-sm transition">
+                        <button onclick="startGame()" 
+                            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-200">
+                            Mula Simulasi
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.startGame = function() {
+            const input = document.getElementById('playerNameInput');
+            const name = input.value.trim();
+            if (name === '') {
+                // Custom message instead of alert
+                showNotification('Sila masukkan nama kamu dahulu!', 'error');
+                input.focus();
+                return;
+            }
+            state.playerName = name;
+            state.hasStarted = true;
+            state.currentStage = 0;
+            render();
+        }
+
+        function renderStageScreen() {
+            const stage = stages[state.currentStage];
+            const progress = ((state.currentStage) / stages.length) * 100;
+
+            contentArea.innerHTML = `
+                <div class="fade-in flex flex-col h-full">
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                        <div class="bg-amber-400 h-2.5 rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-4 text-sm font-bold text-emerald-600 uppercase tracking-wider">
+                        <span>${stage.title}</span>
+                        <span>Tahap ${state.currentStage + 1} / ${stages.length}</span>
+                    </div>
+
+                    <div class="bg-emerald-50 rounded-2xl p-5 mb-6 border border-emerald-100 shadow-sm">
+                        <p class="text-gray-700 italic">"Wahai <span class="font-bold text-emerald-700">${state.playerName}</span>, ${stage.narrative}"</p>
+                    </div>
+
+                    <div class="mb-8 flex-grow">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">${stage.question}</h3>
+                        <div class="space-y-3" id="options-container">
+                            ${stage.options.map((opt, index) => `
+                                <button onclick="checkAnswer(${index})" class="w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 font-medium text-gray-700 transition duration-200 focus:outline-none">
+                                    ${opt.text}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Custom Notification Box (Hidden initially) -->
+                    <div id="feedback-box" class="hidden rounded-xl p-5 mb-4 shadow-md mt-auto">
+                        <h4 id="feedback-title" class="font-bold text-lg mb-2"></h4>
+                        <p id="feedback-desc" class="text-sm mb-4"></p>
+                        <button id="next-btn" onclick="nextStage()" class="hidden w-full py-3 rounded-lg font-bold text-white shadow-md transition transform hover:scale-105"></button>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.checkAnswer = function(selectedIndex) {
+            const stage = stages[state.currentStage];
+            const isCorrect = stage.options[selectedIndex].isCorrect;
+            const optionsContainer = document.getElementById('options-container');
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackDesc = document.getElementById('feedback-desc');
+            const nextBtn = document.getElementById('next-btn');
+
+            // Disable buttons after clicking
+            const buttons = optionsContainer.querySelectorAll('button');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                btn.classList.remove('hover:border-emerald-500', 'hover:bg-emerald-50');
+                if (idx === selectedIndex) {
+                    btn.classList.add(isCorrect ? 'bg-emerald-100' : 'bg-red-100');
+                    btn.classList.add(isCorrect ? 'border-emerald-500' : 'border-red-500');
+                } else if (stage.options[idx].isCorrect) {
+                    // Highlight the correct one if they got it wrong
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50');
+                }
+            });
+
+            feedbackBox.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-red-100', 'text-red-800');
+            nextBtn.classList.remove('hidden', 'bg-emerald-600', 'hover:bg-emerald-700', 'bg-amber-500', 'hover:bg-amber-600');
+            
+            feedbackBox.classList.add('bounce-in');
+
+            if (isCorrect) {
+                feedbackBox.classList.add('bg-emerald-100', 'text-emerald-900', 'border', 'border-emerald-300');
+                feedbackTitle.innerText = "✨ Jawapan Tepat!";
+                feedbackDesc.innerText = stage.explanation;
+                nextBtn.innerText = "Teruskan Perjalanan";
+                nextBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+                nextBtn.setAttribute('onclick', 'nextStage()');
+            } else {
+                feedbackBox.classList.add('bg-red-100', 'text-red-900', 'border', 'border-red-300');
+                feedbackTitle.innerText = "Cuba Lagi!";
+                feedbackDesc.innerText = "Jawapan kurang tepat. Fikirkan semula tentang sejarah dakwah Nabi SAW.";
+                nextBtn.innerText = "Cuba Semula Peringkat Ini";
+                nextBtn.classList.add('bg-amber-500', 'hover:bg-amber-600');
+                nextBtn.setAttribute('onclick', 'retryStage()');
+            }
+        }
+
+        window.nextStage = function() {
+            state.currentStage++;
+            render();
+        }
+
+        window.retryStage = function() {
+            render(); // Re-render the same stage
+        }
+
+        function renderCompletionScreen() {
+            contentArea.innerHTML = `
+                <div class="text-center bounce-in">
+                    <div class="mb-6 flex justify-center">
+                        <div class="w-32 h-32 bg-amber-100 rounded-full flex items-center justify-center text-6xl shadow-lg border-4 border-amber-300">
+                            🏆
+                        </div>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Tahniah, ${state.playerName}!</h2>
+                    <p class="text-lg text-emerald-600 font-semibold mb-6">Kamu telah berjaya menamatkan Simulasi Dakwah Nabi</p>
+                    
+                    <div class="bg-gray-50 rounded-2xl p-6 mb-8 text-left border border-gray-200">
+                        <h3 class="font-bold text-gray-800 mb-3 border-b pb-2">Kesimpulan yang kita pelajari:</h3>
+                        <ul class="space-y-2 text-sm text-gray-700 list-disc list-inside">
+                            <li>Dakwah ialah menyeru manusia kepada Allah.</li>
+                            <li>Bermula secara sulit di rumah Al-Arqam selama 3 tahun.</li>
+                            <li>Rasulullah dituduh gila, sihir dan pendusta, namun <strong>tidak pernah berputus asa</strong>.</li>
+                            <li>Sahabat seperti Saidina Bilal bin Rabah sanggup diseksa demi mempertahankan iman.</li>
+                        </ul>
+                    </div>
+
+                    <button onclick="restartGame()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition">
+                        Main Semula
+                    </button>
+                </div>
+            `;
+        }
+
+        window.restartGame = function() {
+            state.hasStarted = false;
+            state.currentStage = 0;
+            state.playerName = '';
+            render();
+        }
+
+        function showNotification(message, type) {
+            // Simple visual notification system
+            const existingNotif = document.getElementById('custom-notif');
+            if(existingNotif) existingNotif.remove();
+
+            const notif = document.createElement('div');
+            notif.id = 'custom-notif';
+            notif.className = `absolute top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full text-white font-bold shadow-lg fade-in z-50 ${type === 'error' ? 'bg-red-500' : 'bg-emerald-500'}`;
+            notif.innerText = message;
+            
+            document.getElementById('app').appendChild(notif);
+
+            setTimeout(() => {
+                notif.style.opacity = '0';
+                notif.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => notif.remove(), 500);
+            }, 3000);
+        }
+
+        // Initialize App
+        render();
+
+    </script>
+</body>
+</html>

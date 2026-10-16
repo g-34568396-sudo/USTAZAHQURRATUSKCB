@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pengembaraan Sirah: Dakwah Nabi Muhammad ﷺ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fef3c7; /* Light sand/amber background */
+            background-image: radial-gradient(#fde68a 2px, transparent 2px);
+            background-size: 30px 30px;
+            touch-action: manipulation;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        #game-container {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 4/3;
+            position: relative;
+            background-color: #fcd34d; /* Sand base */
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 4px solid #d97706;
+            touch-action: none; /* Prevent scroll while playing */
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bounce-in { animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        /* D-Pad Styles for mobile */
+        .d-pad-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            user-select: none;
+        }
+        .d-pad-btn:active {
+            background: rgba(200, 200, 200, 0.9);
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-2 sm:p-4">
+
+    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden relative border border-amber-200">
+        <!-- Header -->
+        <div class="bg-amber-600 p-4 text-center text-white shadow-md z-10 relative">
+            <h1 class="text-2xl sm:text-3xl font-bold mb-1">Pengembaraan Dakwah Rasulullah ﷺ</h1>
+            <p class="text-amber-100 text-xs sm:text-sm">Pendidikan Islam Tahun 4 - Sirah</p>
+        </div>
+
+        <div class="p-4 sm:p-6 min-h-[500px] flex flex-col items-center justify-center relative" id="main-content">
+            
+            <!-- START SCREEN -->
+            <div id="start-screen" class="w-full max-w-md text-center fade-in">
+                <div class="mb-6 flex justify-center text-6xl">🕌</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Mari Mengembara!</h2>
+                <p class="text-gray-600 mb-6 text-sm">Pilih watak dan gerakkan karakter kamu untuk menelusuri kisah dakwah Nabi Muhammad SAW.</p>
+                
+                <input type="text" id="playerNameInput" placeholder="Masukkan Nama Kamu..." 
+                    class="w-full px-4 py-3 rounded-xl border-2 border-amber-200 focus:border-amber-500 focus:outline-none mb-4 text-center text-lg font-semibold text-gray-700 shadow-sm transition">
+                
+                <p class="font-semibold text-gray-700 mb-3">Pilih Karakter:</p>
+                <div class="flex justify-center gap-4 mb-6">
+                    <button onclick="selectGender('boy')" id="btn-boy" class="w-24 h-24 text-5xl bg-blue-50 border-4 border-blue-200 rounded-2xl flex items-center justify-center hover:bg-blue-100 transition transform hover:scale-105">👦</button>
+                    <button onclick="selectGender('girl')" id="btn-girl" class="w-24 h-24 text-5xl bg-pink-50 border-4 border-pink-200 rounded-2xl flex items-center justify-center hover:bg-pink-100 transition transform hover:scale-105">👧</button>
+                </div>
+
+                <button onclick="startGame()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-200">
+                    Mula Pengembaraan
+                </button>
+            </div>
+
+            <!-- GAME SCREEN -->
+            <div id="game-area" class="hidden w-full flex flex-col items-center relative fade-in">
+                <div class="w-full flex justify-between items-center mb-2 px-2">
+                    <span class="font-bold text-amber-700 text-sm sm:text-base" id="player-status-name"></span>
+                    <span class="font-bold text-amber-700 text-sm sm:text-base bg-amber-100 px-3 py-1 rounded-full" id="stage-status">Tahap 1 / 7</span>
+                </div>
+
+                <div id="game-container">
+                    <canvas id="gameCanvas" width="800" height="600"></canvas>
+                    
+                    <!-- Question Modal Overlay (Hidden by default) -->
+                    <div id="question-modal" class="hidden absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-20">
+                        <div class="bg-white rounded-2xl p-5 sm:p-6 w-full max-w-lg shadow-2xl bounce-in flex flex-col max-h-full overflow-y-auto">
+                            <h3 id="q-title" class="text-sm font-bold text-amber-600 uppercase tracking-wider mb-2"></h3>
+                            <div class="bg-amber-50 rounded-xl p-3 mb-4 border border-amber-100">
+                                <p id="q-narrative" class="text-gray-700 text-sm italic"></p>
+                            </div>
+                            <h4 id="q-text" class="text-lg font-bold text-gray-800 mb-4"></h4>
+                            <div id="q-options" class="space-y-2 mb-4">
+                                <!-- Options injected here -->
+                            </div>
+                            
+                            <!-- Feedback box inside modal -->
+                            <div id="q-feedback" class="hidden rounded-xl p-3 mb-4 border">
+                                <h5 id="q-feedback-title" class="font-bold text-md mb-1"></h5>
+                                <p id="q-feedback-desc" class="text-sm"></p>
+                            </div>
+                            <button id="q-next-btn" class="hidden w-full py-3 rounded-lg font-bold text-white shadow-md transition transform hover:scale-105"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- On-Screen Controls for Touch Devices -->
+                <div class="mt-4 grid grid-cols-3 gap-2 sm:hidden touch-none" id="mobile-controls">
+                    <div></div>
+                    <div class="d-pad-btn" id="btn-up">⬆️</div>
+                    <div></div>
+                    <div class="d-pad-btn" id="btn-left">⬅️</div>
+                    <div class="d-pad-btn" id="btn-down">⬇️</div>
+                    <div class="d-pad-btn" id="btn-right">➡️</div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2 sm:block hidden">Gunakan kekunci anak panah (Arrow Keys) atau W,A,S,D untuk bergerak.</p>
+            </div>
+
+            <!-- END SCREEN -->
+            <div id="end-screen" class="hidden w-full max-w-md text-center bounce-in">
+                <div class="mb-6 flex justify-center text-7xl">🏆</div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Tahniah!</h2>
+                <p class="text-lg text-amber-600 font-semibold mb-6">Kamu telah melengkapkan Perjalanan Sirah</p>
+                <div class="bg-gray-50 rounded-2xl p-4 mb-6 text-left border border-gray-200 text-sm">
+                    <p class="font-bold mb-2">Kesimpulan:</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-1">
+                        <li>Dakwah ialah menyeru kepada Allah.</li>
+                        <li>Bermula secara sulit 3 tahun di rumah Al-Arqam.</li>
+                        <li>Tentangan: dituduh gila, sihir.</li>
+                        <li>Pengorbanan: Bilal bin Rabah diseksa.</li>
+                        <li>Nabi tidak pernah berputus asa.</li>
+                    </ul>
+                </div>
+                <button onclick="location.reload()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition">
+                    Main Semula
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Notification system -->
+    <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"></div>
+
+    <script>
+        // Data Soalan
+        const stages = [
+            {
+                title: "Peringkat 1: Pengertian Dakwah",
+                narrative: "Sebelum memulakan perjalanan, kamu perlu faham apa itu 'Dakwah'. Terdapat pihak yang salah faham menyangka dakwah adalah mengajak manusia kepada keseronokan dunia semata-mata.",
+                question: "Adakah dakwah bermaksud menyeru dan mengajak umat manusia kepada dunia?",
+                options: [
+                    { text: "Ya, menyeru kepada dunia", isCorrect: false },
+                    { text: "Tidak, dakwah adalah menyeru kepada Allah", isCorrect: true }
+                ],
+                explanation: "Betul! Dakwah bermaksud menyeru dan mengajak umat manusia beriman kepada Allah, bukan kepada dunia."
+            },
+            {
+                title: "Peringkat 2: Permulaan Wahyu",
+                narrative: "Setelah menerima wahyu, Baginda Nabi Muhammad SAW mula menjalankan perintah Allah untuk menyebarkan Islam kepada masyarakat.",
+                question: "Bagaimanakah cara Nabi Muhammad SAW berdakwah pada permulaannya?",
+                options: [
+                    { text: "Secara Terang-terangan (Terbuka)", isCorrect: false },
+                    { text: "Secara Sulit (Rahsia)", isCorrect: true }
+                ],
+                explanation: "Tepat sekali! Pada permulaannya, Nabi SAW berdakwah secara sulit untuk membina asas akidah yang kuat."
+            },
+            {
+                title: "Peringkat 3: Pusat Dakwah Sulit",
+                narrative: "Nabi memerlukan satu tempat yang selamat untuk mengumpulkan para sahabat dan mengajarkan ajaran Islam tanpa disedari oleh musuh.",
+                question: "Di manakah Nabi berdakwah secara sulit bersama para sahabat?",
+                options: [
+                    { text: "Di rumah Abu Bakar As-Siddiq", isCorrect: false },
+                    { text: "Di rumah Al-Arqam bin Abi Al-Arqam", isCorrect: true }
+                ],
+                explanation: "Alhamdulillah! Nabi berdakwah secara sulit di rumah Al-Arqam bin Abi Al-Arqam, bukan di rumah Abu Bakar."
+            },
+            {
+                title: "Peringkat 4: Tempoh Berdakwah",
+                narrative: "Pergerakan secara rahsia ini memerlukan kesabaran yang tinggi. Golongan terawal memeluk Islam dididik secara langsung oleh Baginda.",
+                question: "Berapa lamakah Nabi Muhammad SAW berdakwah secara sulit?",
+                options: [
+                    { text: "Selama Tiga Tahun", isCorrect: true },
+                    { text: "Selama Sepuluh Tahun", isCorrect: false }
+                ],
+                explanation: "Syabas! Dakwah secara sulit mengambil masa selama 3 tahun sebelum perintah berdakwah terang-terangan diturunkan."
+            },
+            {
+                title: "Peringkat 5: Tentangan Musyrikin",
+                narrative: "Apabila dakwah mula dijalankan secara terang-terangan, orang Musyrikin Quraisy berasa marah dan mula menentang Baginda.",
+                question: "Apakah tuduhan jahat orang Quraisy terhadap Nabi Muhammad SAW?",
+                options: [
+                    { text: "Sebagai gila, ahli sihir dan pendusta", isCorrect: true },
+                    { text: "Sebagai seorang yang sangat amanah", isCorrect: false }
+                ],
+                explanation: "Betul. Orang Quraisy menuduh nabi sebagai gila, ahli sihir dan pendusta untuk menghalang orang ramai dari mendengar dakwah."
+            },
+            {
+                title: "Peringkat 6: Pengorbanan Sahabat",
+                narrative: "Bukan sahaja Nabi, malah para sahabat turut diseksa dengan teruk kerana mempertahankan kalimah tauhid.",
+                question: "Siapakah sahabat yang diseksa dengan diletakkan batu besar di atas dada di tengah panas?",
+                options: [
+                    { text: "Saidina Yassir", isCorrect: false },
+                    { text: "Saidina Bilal bin Rabah", isCorrect: true }
+                ],
+                explanation: "Tepat! Sahabat yang diseksa dengan batu besar di atas dada ialah Saidina Bilal bin Rabah. Walaupun diseksa, beliau tetap melaungkan 'Ahad, Ahad' (Allah Maha Esa)."
+            },
+            {
+                title: "Peringkat 7: Ketabahan Baginda",
+                narrative: "Pelbagai rintangan, cacian, dan halangan fizikal telah dilalui oleh Rasulullah SAW dalam perjalanan dakwah Baginda.",
+                question: "Adakah Nabi Muhammad SAW pernah berputus asa dalam berdakwah?",
+                options: [
+                    { text: "Ya, Baginda pernah berehat panjang", isCorrect: false },
+                    { text: "Tidak, Baginda tidak pernah berputus asa", isCorrect: true }
+                ],
+                explanation: "Alhamdulillah! Baginda Nabi Muhammad SAW tidak pernah berputus asa dalam berdakwah. Sifat ini wajib kita contohi."
+            }
+        ];
+
+        let state = {
+            playerName: '',
+            gender: null,
+            currentStage: 0,
+            isDialogActive: false,
+            gameFinished: false
+        };
+
+        // UI Elements
+        const startScreen = document.getElementById('start-screen');
+        const gameArea = document.getElementById('game-area');
+        const endScreen = document.getElementById('end-screen');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const modal = document.getElementById('question-modal');
+
+        // Game Configuration
+        const CANVAS_WIDTH = 800;
+        const CANVAS_HEIGHT = 600;
+        
+        const player = {
+            x: 50,
+            y: 500,
+            speed: 5,
+            size: 40,
+            emoji: '👦'
+        };
+
+        const keys = {
+            ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
+            w: false, s: false, a: false, d: false
+        };
+
+        // Waypoints path
+        const waypoints = [
+            { x: 120, y: 500 }, // Stage 1
+            { x: 250, y: 380 }, // Stage 2
+            { x: 400, y: 450 }, // Stage 3
+            { x: 550, y: 320 }, // Stage 4
+            { x: 400, y: 180 }, // Stage 5
+            { x: 600, y: 120 }, // Stage 6
+            { x: 720, y: 250 }  // Stage 7
+        ];
+
+        function selectGender(gender) {
+            state.gender = gender;
+            document.getElementById('btn-boy').classList.remove('border-blue-500', 'bg-blue-200');
+            document.getElementById('btn-girl').classList.remove('border-pink-500', 'bg-pink-200');
+            
+            if(gender === 'boy') {
+                document.getElementById('btn-boy').classList.add('border-blue-500', 'bg-blue-200');
+                player.emoji = '👦';
+            } else {
+                document.getElementById('btn-girl').classList.add('border-pink-500', 'bg-pink-200');
+                player.emoji = '👧🧕'; // Adding hijab emoji variant
+                player.emoji = '🧕'; // Use hijab girl directly for Islamic ed context
+            }
+        }
+
+        window.startGame = function() {
+            const input = document.getElementById('playerNameInput');
+            const name = input.value.trim();
+            if (name === '') {
+                showToast('Sila masukkan nama kamu dahulu!', 'error');
+                input.focus();
+                return;
+            }
+            if (!state.gender) {
+                showToast('Sila pilih karakter Lelaki atau Perempuan.', 'error');
+                return;
+            }
+            
+            state.playerName = name;
+            document.getElementById('player-status-name').innerText = `Karakter: ${name}`;
+            
+            startScreen.classList.add('hidden');
+            gameArea.classList.remove('hidden');
+            
+            // Set initial position
+            player.x = 50;
+            player.y = 500;
+            
+            // Start game loop
+            requestAnimationFrame(gameLoop);
+        }
+
+        function showToast(message, type) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 mb-2 rounded-full text-white font-bold shadow-lg fade-in ${type === 'error' ? 'bg-red-500' : 'bg-green-500'}`;
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.5s';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (keys.hasOwnProperty(e.key) && !state.isDialogActive) {
+                keys[e.key] = true;
+            }
+        });
+        window.addEventListener('keyup', (e) => {
+            if (keys.hasOwnProperty(e.key)) {
+                keys[e.key] = false;
+            }
+        });
+
+        // Touch controls setup
+        const setupTouch = (btnId, keyEquiv) => {
+            const btn = document.getElementById(btnId);
+            if(!btn) return;
+            btn.addEventListener('touchstart', (e) => { e.preventDefault(); if(!state.isDialogActive) keys[keyEquiv] = true; });
+            btn.addEventListener('touchend', (e) => { e.preventDefault(); keys[keyEquiv] = false; });
+            btn.addEventListener('mousedown', (e) => { if(!state.isDialogActive) keys[keyEquiv] = true; });
+            btn.addEventListener('mouseup', (e) => { keys[keyEquiv] = false; });
+            btn.addEventListener('mouseleave', (e) => { keys[keyEquiv] = false; });
+        };
+        setupTouch('btn-up', 'ArrowUp');
+        setupTouch('btn-down', 'ArrowDown');
+        setupTouch('btn-left', 'ArrowLeft');
+        setupTouch('btn-right', 'ArrowRight');
+
+
+        let bounceOffset = 0;
+        let bounceDir = 1;
+
+        function update() {
+            if (state.isDialogActive || state.gameFinished) return;
+
+            // Movement logic
+            if (keys.ArrowUp || keys.w) player.y -= player.speed;
+            if (keys.ArrowDown || keys.s) player.y += player.speed;
+            if (keys.ArrowLeft || keys.a) player.x -= player.speed;
+            if (keys.ArrowRight || keys.d) player.x += player.speed;
+
+            // Boundaries
+            player.x = Math.max(player.size, Math.min(CANVAS_WIDTH - player.size, player.x));
+            player.y = Math.max(player.size, Math.min(CANVAS_HEIGHT - player.size, player.y));
+
+            // Collision with current waypoint
+            if (state.currentStage < waypoints.length) {
+                const target = waypoints[state.currentStage];
+                const dist = Math.hypot(player.x - target.x, player.y - target.y);
+                
+                if (dist < player.size) {
+                    triggerDialog();
+                }
+            }
+
+            // Animation vars
+            bounceOffset += 0.5 * bounceDir;
+            if(bounceOffset > 10) bounceDir = -1;
+            if(bounceOffset < 0) bounceDir = 1;
+        }
+
+        function draw() {
+            // Clear canvas
+            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+            // Draw simple decorative elements (trees, rocks)
+            drawDecorations();
+
+            // Draw Path
+            ctx.beginPath();
+            ctx.moveTo(50, 500); // Start point
+            for (let i = 0; i < waypoints.length; i++) {
+                ctx.lineTo(waypoints[i].x, waypoints[i].y);
+            }
+            ctx.strokeStyle = "rgba(217, 119, 6, 0.3)"; // Faded amber path
+            ctx.lineWidth = 15;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.setLineDash([20, 20]);
+            ctx.stroke();
+            ctx.setLineDash([]); // reset
+
+            // Draw Waypoints
+            for (let i = 0; i < waypoints.length; i++) {
+                const wp = waypoints[i];
+                if (i < state.currentStage) {
+                    // Completed
+                    ctx.font = "30px Arial";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("✅", wp.x, wp.y);
+                } else if (i === state.currentStage) {
+                    // Current Target - Bouncing Star
+                    ctx.font = "40px Arial";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("🌟", wp.x, wp.y - bounceOffset);
+                    
+                    // Draw indicator text
+                    ctx.font = "bold 16px Inter";
+                    ctx.fillStyle = "#92400e";
+                    ctx.fillText("Pergi ke sini!", wp.x, wp.y - 40 - bounceOffset);
+                } else {
+                    // Locked
+                    ctx.font = "30px Arial";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("🔒", wp.x, wp.y);
+                }
+            }
+
+            // Draw Player
+            ctx.font = `${player.size * 1.5}px Arial`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(player.emoji, player.x, player.y);
+        }
+
+        function drawDecorations() {
+            // Draw a few static background elements (palm trees emojis, rocks)
+            const decos = [
+                {x: 100, y: 100, emoji: '🌴'}, {x: 700, y: 500, emoji: '🌴'},
+                {x: 300, y: 150, emoji: '⛺'}, {x: 500, y: 500, emoji: '🐪'},
+                {x: 200, y: 300, emoji: '🪨'}, {x: 650, y: 300, emoji: '🪨'}
+            ];
+            ctx.font = "40px Arial";
+            ctx.textAlign = "center";
+            decos.forEach(d => {
+                ctx.fillText(d.emoji, d.x, d.y);
+            });
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            if (!state.gameFinished) {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        function triggerDialog() {
+            state.isDialogActive = true;
+            // Stop movement completely
+            Object.keys(keys).forEach(k => keys[k] = false);
+
+            const stageData = stages[state.currentStage];
+            
+            document.getElementById('q-title').innerText = stageData.title;
+            document.getElementById('q-narrative').innerHTML = `"Wahai <strong>${state.playerName}</strong>, ${stageData.narrative}"`;
+            document.getElementById('q-text').innerText = stageData.question;
+            
+            const optionsContainer = document.getElementById('q-options');
+            optionsContainer.innerHTML = '';
+            
+            stageData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3 rounded-xl border-2 border-gray-200 hover:border-amber-500 hover:bg-amber-50 font-medium text-gray-700 transition duration-200 focus:outline-none";
+                btn.innerText = opt.text;
+                btn.onclick = () => handleAnswer(idx);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Reset feedback
+            document.getElementById('q-feedback').classList.add('hidden');
+            document.getElementById('q-next-btn').classList.add('hidden');
+
+            modal.classList.remove('hidden');
+        }
+
+        window.handleAnswer = function(idx) {
+            const stageData = stages[state.currentStage];
+            const isCorrect = stageData.options[idx].isCorrect;
+            
+            const buttons = document.getElementById('q-options').querySelectorAll('button');
+            buttons.forEach((btn, i) => {
+                btn.disabled = true;
+                if (i === idx) {
+                    btn.classList.add(isCorrect ? 'bg-green-100' : 'bg-red-100');
+                    btn.classList.add(isCorrect ? 'border-green-500' : 'border-red-500');
+                } else if (stageData.options[i].isCorrect) {
+                    btn.classList.add('border-green-500', 'bg-green-50');
+                }
+            });
+
+            const feedback = document.getElementById('q-feedback');
+            const feedbackTitle = document.getElementById('q-feedback-title');
+            const feedbackDesc = document.getElementById('q-feedback-desc');
+            const nextBtn = document.getElementById('q-next-btn');
+
+            feedback.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'border-green-300', 'bg-red-100', 'text-red-800', 'border-red-300');
+            nextBtn.classList.remove('hidden', 'bg-amber-500', 'hover:bg-amber-600', 'bg-gray-500', 'hover:bg-gray-600');
+
+            if (isCorrect) {
+                feedback.classList.add('bg-green-100', 'text-green-900', 'border-green-300');
+                feedbackTitle.innerText = "✨ Tepat Sekali!";
+                feedbackDesc.innerText = stageData.explanation;
+                nextBtn.innerText = "Teruskan Perjalanan";
+                nextBtn.classList.add('bg-amber-500', 'hover:bg-amber-600');
+                nextBtn.onclick = () => {
+                    modal.classList.add('hidden');
+                    state.currentStage++;
+                    document.getElementById('stage-status').innerText = `Tahap ${Math.min(state.currentStage + 1, stages.length)} / 7`;
+                    state.isDialogActive = false;
+                    
+                    if (state.currentStage >= stages.length) {
+                        endGame();
+                    } else {
+                        // Push player slightly away from the completed point so they don't re-trigger immediately if logic fails
+                        player.x -= 5;
+                    }
+                };
+            } else {
+                feedback.classList.add('bg-red-100', 'text-red-900', 'border-red-300');
+                feedbackTitle.innerText = "Cuba Lagi!";
+                feedbackDesc.innerText = "Jawapan kurang tepat. Hayati kisah sirah ini dan cuba semula.";
+                nextBtn.innerText = "Ulang Soalan";
+                nextBtn.classList.add('bg-gray-500', 'hover:bg-gray-600');
+                nextBtn.onclick = () => {
+                    modal.classList.add('hidden');
+                    // Back player up a bit to allow them to re-trigger
+                    player.y += 30; 
+                    state.isDialogActive = false;
+                };
+            }
+        }
+
+        function endGame() {
+            state.gameFinished = true;
+            gameArea.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+        }
+
+        // Fallback for canvas scaling on resize
+        window.addEventListener('resize', () => {
+            // Internal resolution stays 800x600, CSS handles the scaling gracefully.
+        });
+
+    </script>
+</body>
+</html>

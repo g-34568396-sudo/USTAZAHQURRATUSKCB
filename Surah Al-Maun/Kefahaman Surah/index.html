@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ms" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Interaktif Surah Al-Ma'un</title>
+    
+    <!-- Memuatkan Tailwind CSS untuk reka bentuk yang pantas dan responsif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Memuatkan fon Google untuk tulisan Arab yang cantik dan mudah dibaca -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fdf2f8; /* Latar belakang pink lembut */
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f9a8d4' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            direction: rtl;
+        }
+
+        /* Animasi Kustom untuk gambar/emoji */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse-fast {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes swing {
+            20% { transform: rotate(15deg); }
+            40% { transform: rotate(-10deg); }
+            60% { transform: rotate(5deg); }
+            80% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .anim-shake { animation: shake 1s infinite; }
+        .anim-float { animation: float 2s infinite ease-in-out; }
+        .anim-pulse { animation: pulse-fast 1s infinite; }
+        .anim-swing { animation: swing 2s infinite; }
+        .anim-bounce { animation: bounce 1.5s infinite; }
+
+        /* Sembunyikan scrollbar untuk paparan yang lebih kemas */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 text-slate-800">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-pink-200">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-pink-400 to-purple-400 p-6 text-center text-white">
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-2 drop-shadow-md">Kefahaman Surah Al-Ma'un</h1>
+            <p class="text-lg md:text-xl font-semibold bg-white/20 inline-block px-4 py-1 rounded-full">Tekan ayat untuk lihat maksud & animasi!</p>
+        </div>
+
+        <!-- Senarai Ayat Container -->
+        <div class="p-6 md:p-10 space-y-6" id="ayat-container">
+            <!-- Ayat akan dimasukkan di sini menggunakan JavaScript -->
+        </div>
+        
+    </div>
+
+    <!-- Modal -->
+    <div id="info-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0 duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-lg w-[90%] md:w-full mx-auto transform scale-95 transition-transform duration-300 relative text-center border-4 border-purple-300">
+            
+            <!-- Butang Tutup -->
+            <button onclick="closeModal()" class="absolute -top-4 -right-4 bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold hover:bg-red-600 shadow-lg border-2 border-white transition-colors">
+                &times;
+            </button>
+            
+            <!-- Nombor Ayat -->
+            <div id="modal-ayat-num" class="bg-purple-100 text-purple-700 text-sm font-bold px-4 py-1 rounded-full inline-block mb-4">
+                Ayat 1
+            </div>
+
+            <!-- Gambar Bergerak (Animasi CSS) -->
+            <div class="text-7xl mb-6 min-h-[100px] flex justify-center items-center">
+                <div id="modal-animation" class="inline-block">
+                    <!-- Emoji/Ikon akan dimuatkan di sini -->
+                </div>
+            </div>
+            
+            <!-- Teks Arab Modal -->
+            <div id="modal-arabic" class="arabic-text text-3xl md:text-4xl text-slate-800 mb-6 leading-loose border-b-2 border-slate-100 pb-4">
+                أَرَءَيْتَ ٱلَّذِى يُكَذِّبُ بِٱلدِّينِ
+            </div>
+            
+            <!-- Maksud Melayu -->
+            <div id="modal-meaning" class="text-lg md:text-2xl font-bold text-slate-700 bg-pink-50 p-4 rounded-xl shadow-inner">
+                Tahukah engkau orang yang mendustakan agama?
+            </div>
+            
+            <!-- Butang Faham -->
+            <button onclick="closeModal()" class="mt-8 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg hover:scale-105 transition-all w-full text-lg">
+                Seterusnya
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Data ayat berdasarkan buku teks
+        const surahData = [
+            {
+                id: 1,
+                arabic: "أَرَءَيْتَ ٱلَّذِى يُكَذِّبُ بِٱلدِّينِ ﴿١﴾",
+                meaning: "Tahukah engkau orang yang mendustakan agama?",
+                color: "bg-blue-100 border-blue-200",
+                hover: "hover:bg-blue-200 hover:border-blue-300",
+                icon: "🙅‍♂️📜",
+                animation: "anim-shake" // Geleng kepala / menolak
+            },
+            {
+                id: 2,
+                arabic: "فَذَٰلِكَ ٱلَّذِى يَدُعُّ ٱلْيَتِيمَ ﴿٢﴾",
+                meaning: "Itulah orang yang mengherdik anak yatim.",
+                color: "bg-pink-100 border-pink-200",
+                hover: "hover:bg-pink-200 hover:border-pink-300",
+                icon: "😠👊👦",
+                animation: "anim-swing" // Marah / menolak
+            },
+            {
+                id: 3,
+                arabic: "وَلَا يَحُضُّ عَلَىٰ طَعَامِ ٱلْمِسْكِينِ ﴿٣﴾",
+                meaning: "Dan tidak menggalakkan memberi makan kepada orang miskin.",
+                color: "bg-blue-100 border-blue-200",
+                hover: "hover:bg-blue-200 hover:border-blue-300",
+                icon: "🚫🍽️",
+                animation: "anim-pulse" // Tiada makanan (berkelip)
+            },
+            {
+                id: 4,
+                arabic: "فَوَيْلٌ لِّلْمُصَلِّينَ ﴿٤﴾",
+                meaning: "Maka celakalah bagi orang yang solat.",
+                color: "bg-pink-100 border-pink-200",
+                hover: "hover:bg-pink-200 hover:border-pink-300",
+                icon: "⚠️🧎",
+                animation: "anim-shake" // Amaran
+            },
+            {
+                id: 5,
+                arabic: "ٱلَّذِينَ هُمْ عَن صَلَاتِهِمْ سَاهُونَ ﴿٥﴾",
+                meaning: "(Iaitu) orang yang lalai terhadap solatnya.",
+                color: "bg-blue-100 border-blue-200",
+                hover: "hover:bg-blue-200 hover:border-blue-300",
+                icon: "⏰😴",
+                animation: "anim-float" // Lalai/Tidur (terapung)
+            },
+            {
+                id: 6,
+                arabic: "ٱلَّذِينَ هُمْ يُرَآءُونَ ﴿٦﴾",
+                meaning: "Orang yang riak.",
+                color: "bg-pink-100 border-pink-200",
+                hover: "hover:bg-pink-200 hover:border-pink-300",
+                icon: "👀✨",
+                animation: "anim-pulse" // Menunjuk-nunjuk (bersinar/kelip)
+            },
+            {
+                id: 7,
+                arabic: "وَيَمْنَعُونَ ٱلْمَاعُونَ ﴿٧﴾",
+                meaning: "Dan mereka enggan (menolong dengan) barang yang bermanfaat.",
+                color: "bg-blue-100 border-blue-200",
+                hover: "hover:bg-blue-200 hover:border-blue-300",
+                icon: "🤲🚫",
+                animation: "anim-swing" // Tahan tangan
+            }
+        ];
+
+        const container = document.getElementById('ayat-container');
+        const modal = document.getElementById('info-modal');
+        const modalAyatNum = document.getElementById('modal-ayat-num');
+        const modalArabic = document.getElementById('modal-arabic');
+        const modalMeaning = document.getElementById('modal-meaning');
+        const modalAnimation = document.getElementById('modal-animation');
+
+        // Membina butang ayat
+        function renderAyat() {
+            surahData.forEach(item => {
+                const button = document.createElement('button');
+                // Susun atur warna bergilir macam dalam buku teks
+                button.className = `w-full text-center p-6 md:p-8 rounded-2xl shadow-sm border-2 transition-all transform hover:-translate-y-1 ${item.color} ${item.hover}`;
+                button.onclick = () => openModal(item);
+                
+                button.innerHTML = `
+                    <div class="arabic-text text-2xl md:text-4xl text-slate-800 font-bold mb-2">
+                        ${item.arabic}
+                    </div>
+                    <div class="text-sm font-bold text-slate-500 mt-3 opacity-75">
+                        <i class="fas fa-hand-pointer mr-1"></i> Tekan untuk maksud
+                    </div>
+                `;
+                container.appendChild(button);
+            });
+        }
+
+        // Buka Modal
+        function openModal(data) {
+            // Tetapkan data ke dalam modal
+            modalAyatNum.textContent = `Ayat ${data.id}`;
+            modalArabic.textContent = data.arabic;
+            modalMeaning.textContent = data.meaning;
+            
+            // Set ikon dan animasi
+            modalAnimation.textContent = data.icon;
+            modalAnimation.className = `inline-block ${data.animation}`; // Reset dan tambah kelas animasi
+
+            // Tunjukkan modal
+            modal.classList.remove('hidden');
+            // Sedikit delay untuk trigger CSS transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-95');
+                modal.firstElementChild.classList.add('scale-100');
+            }, 10);
+        }
+
+        // Tutup Modal
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modal.firstElementChild.classList.remove('scale-100');
+            modal.firstElementChild.classList.add('scale-95');
+            
+            // Sembunyikan selepas transition tamat
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                // Hentikan animasi sementara tersembunyi (reset kelas)
+                modalAnimation.className = "inline-block";
+            }, 300);
+        }
+
+        // Tutup jika klik di luar kotak modal
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Initialize bila muka surat dimuatkan
+        window.onload = renderAyat;
+
+    </script>
+</body>
+</html>

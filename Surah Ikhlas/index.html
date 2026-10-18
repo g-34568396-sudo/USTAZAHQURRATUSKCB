@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ms" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aplikasi Lengkap Surah Al-Ikhlas</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f5f3ff; /* Latar belakang ungu lembut */
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ddd6fe' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            overscroll-behavior-y: contain; /* Elak scroll masa tarik garisan di mobile */
+        }
+        
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            direction: rtl;
+        }
+
+        /* Animasi Kustom untuk Modal */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse-fast {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes swing {
+            20% { transform: rotate(15deg); }
+            40% { transform: rotate(-10deg); }
+            60% { transform: rotate(5deg); }
+            80% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .anim-shake { animation: shake 1s infinite; }
+        .anim-float { animation: float 2s infinite ease-in-out; }
+        .anim-pulse { animation: pulse-fast 1s infinite; }
+        .anim-swing { animation: swing 2s infinite; }
+
+        /* Animasi Game Padanan */
+        @keyframes error-shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .animate-error {
+            animation: error-shake 0.5s ease-in-out;
+            border-color: #ef4444 !important; 
+            background-color: #fef2f2 !important;
+        }
+
+        @keyframes success-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .animate-success {
+            animation: success-pop 0.4s ease-in-out;
+            border-color: #22c55e !important; 
+            background-color: #f0fdf4 !important;
+        }
+
+        /* Styling node (titik sambungan permainan) */
+        .node {
+            transition: transform 0.2s;
+            touch-action: none;
+        }
+        .node:hover { transform: scale(1.2); }
+        .node.active {
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(167, 139, 250, 0.8);
+        }
+
+        /* Garisan SVG Permainan */
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        line {
+            stroke-width: 5px;
+            stroke-linecap: round;
+            filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
+            transition: stroke 0.3s;
+        }
+        .line-temp {
+            stroke: #a78bfa; /* Violet 400 */
+            stroke-dasharray: 8, 8;
+        }
+        .line-correct {
+            stroke: #8b5cf6; /* Violet 500 */
+        }
+        .card-item { z-index: 20; }
+        
+        /* Tabs styling */
+        .tab-btn.active {
+            background-color: #8b5cf6; /* Violet 500 */
+            color: white;
+            border-color: #7c3aed;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-2 md:p-6 text-slate-800 flex flex-col items-center">
+
+    <div class="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-violet-300 flex flex-col">
+        
+        <!-- Header Utama -->
+        <div class="bg-gradient-to-r from-violet-500 to-fuchsia-500 p-6 text-center text-white relative z-30">
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-2 drop-shadow-md">Surah Al-Ikhlas</h1>
+            <p class="text-sm md:text-lg font-semibold bg-white/20 inline-block px-4 py-1 rounded-full shadow-sm">Kefahaman & Latihan Interaktif</p>
+        </div>
+
+        <!-- Navigasi Tab -->
+        <div class="flex flex-wrap p-2 bg-slate-100 border-b-2 border-slate-200 justify-center gap-2 z-30 relative">
+            <button onclick="switchTab('tab-nota')" id="btn-nota" class="tab-btn active px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold text-sm md:text-base border-2 border-transparent text-slate-600 hover:bg-violet-100 transition-all">
+                <i class="fas fa-book-open mr-2"></i>Nota Interaktif
+            </button>
+            <button onclick="switchTab('tab-info')" id="btn-info" class="tab-btn px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold text-sm md:text-base border-2 border-transparent text-slate-600 hover:bg-violet-100 transition-all">
+                <i class="fas fa-lightbulb mr-2"></i>Info Penting
+            </button>
+            <button onclick="switchTab('tab-kuiz')" id="btn-kuiz" class="tab-btn px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold text-sm md:text-base border-2 border-transparent text-slate-600 hover:bg-violet-100 transition-all">
+                <i class="fas fa-gamepad mr-2"></i>Latihan Garisan
+            </button>
+        </div>
+
+        <div id="tab-nota" class="tab-content p-6 md:p-10 space-y-6 bg-violet-50 flex-grow">
+            <div class="text-center mb-6">
+                <div class="arabic-text text-3xl md:text-4xl text-slate-800 font-bold mb-2">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+                <div class="text-sm font-bold text-slate-600">Dengan nama Allah yang Maha Pemurah lagi Maha Mengasihani.</div>
+            </div>
+            <div id="nota-container" class="space-y-4 max-w-3xl mx-auto">
+                <!-- Dijana oleh JS -->
+            </div>
+        </div>
+
+        <div id="tab-info" class="tab-content p-6 md:p-10 bg-fuchsia-50 hidden flex-grow">
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Fakta Surah -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border-l-8 border-yellow-400 transform hover:-translate-y-1 transition-transform">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full text-2xl"><i class="fas fa-info-circle"></i></div>
+                        <h2 class="text-xl font-bold text-slate-800">Fakta Surah</h2>
+                    </div>
+                    <ul class="space-y-3 font-semibold text-slate-700">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> Merupakan surah ke-112 dalam Al-Quran.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> Mengandungi 4 ayat sahaja.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> Surah Makkiyah (diturunkan di Makkah).</li>
+                    </ul>
+                </div>
+
+                <!-- Kenapa Al-Ikhlas? -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border-l-8 border-violet-400 transform hover:-translate-y-1 transition-transform">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-violet-100 text-violet-600 p-3 rounded-full text-2xl"><i class="fas fa-star"></i></div>
+                        <h2 class="text-xl font-bold text-slate-800">Kenapa Surah Al-Ikhlas?</h2>
+                    </div>
+                    <p class="font-semibold text-slate-700 leading-relaxed">
+                        Surah ini dikenali dengan Surah Al-Ikhlas kerana ia amat <strong>menegaskan kemurnian tauhid</strong> kepada Allah SWT.
+                    </p>
+                </div>
+
+                <!-- Sifat Allah -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border-l-8 border-blue-400 md:col-span-2 transform hover:-translate-y-1 transition-transform">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-blue-100 text-blue-600 p-3 rounded-full text-2xl"><i class="fas fa-shield-alt"></i></div>
+                        <h2 class="text-xl font-bold text-slate-800">Sifat Kesempurnaan Allah</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-semibold text-slate-700">
+                        <div class="bg-blue-50 p-4 rounded-xl">
+                            Allah memiliki sifat kesempurnaan yang menafikan segala bentuk perkara syirik (menyekutukan) kepada-Nya.
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-xl">
+                            Sesungguhnya tidak ada sesuatu makhluk yang menyamai dan menandingi-Nya walau sedikitpun.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pengajaran -->
+                <div class="bg-gradient-to-r from-pink-400 to-rose-400 p-6 rounded-2xl shadow-lg md:col-span-2 text-white text-center transform hover:scale-[1.02] transition-transform">
+                    <h2 class="text-2xl font-bold mb-2 flex justify-center items-center gap-2">
+                        <i class="fas fa-gem text-yellow-300"></i> Pengajaran Utama
+                    </h2>
+                    <p class="text-lg font-semibold bg-white/20 p-3 rounded-xl inline-block">
+                        Percaya dengan penuh keyakinan akan keesaan Allah.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="tab-kuiz" class="tab-content relative p-6 md:p-10 bg-slate-50 hidden flex-grow min-h-[500px]">
+            
+            <div class="text-center mb-6 relative z-30">
+                <div class="inline-flex items-center gap-2 bg-white text-violet-600 font-bold px-6 py-2 rounded-full shadow-md text-lg border-2 border-violet-200">
+                    <span>Markah:</span>
+                    <span id="score-display">0</span> / 4
+                </div>
+            </div>
+
+            <!-- Canvas/SVG untuk garisan -->
+            <svg id="lines-svg"></svg>
+
+            <div class="grid grid-cols-2 gap-6 md:gap-24 relative z-20 max-w-4xl mx-auto">
+                <!-- Lajur Kiri: Ayat Arab -->
+                <div class="flex flex-col gap-6" id="col-arab"></div>
+                <!-- Lajur Kanan: Maksud & Gambar -->
+                <div class="flex flex-col gap-6" id="col-maksud"></div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div id="info-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0 duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-lg w-[90%] mx-auto transform scale-95 transition-transform duration-300 relative text-center border-4 border-violet-400">
+            <button onclick="closeModal()" class="absolute -top-4 -right-4 bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold hover:bg-red-600 shadow-lg border-2 border-white transition-colors">
+                &times;
+            </button>
+            <div id="modal-ayat-num" class="bg-violet-100 text-violet-700 text-sm font-bold px-4 py-1 rounded-full inline-block mb-4">Ayat 1</div>
+            <div class="text-7xl mb-6 min-h-[100px] flex justify-center items-center">
+                <div id="modal-animation" class="inline-block"></div>
+            </div>
+            <div id="modal-arabic" class="arabic-text text-3xl md:text-4xl text-slate-800 mb-6 leading-loose border-b-2 border-slate-100 pb-4"></div>
+            <div id="modal-meaning" class="text-lg md:text-2xl font-bold text-slate-700 bg-violet-50 p-4 rounded-xl shadow-inner"></div>
+            <button onclick="closeModal()" class="mt-8 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg hover:scale-105 transition-all w-full text-lg">
+                Faham! 👍
+            </button>
+        </div>
+    </div>
+
+    <div id="win-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-slate-900/70 backdrop-blur-sm transition-opacity opacity-0 duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-[90%] text-center border-4 border-yellow-400 transform scale-95 transition-transform duration-300">
+            <div class="text-6xl mb-4 animate-bounce">🎉🥇✨</div>
+            <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Hebat!</h2>
+            <p class="text-lg text-slate-600 mb-6 font-semibold">Awak berjaya memadankan kesemua ayat Surah Al-Ikhlas dengan betul!</p>
+            <button onclick="resetGame()" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg hover:scale-105 transition-all w-full text-lg shadow-md">
+                Main Semula 🔄
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* Data Surah Al-Ikhlas (4 Ayat) */
+        const surahData = [
+            {
+                id: 1,
+                arabic: "قُلْ هُوَ اللَّهُ أَحَدٌ ﴿١﴾",
+                meaning: "Katakanlah (wahai Muhammad), Tuhanku ialah Allah yang Maha Esa.",
+                icon: "☝️",
+                animation: "anim-pulse",
+                color: "bg-blue-100 border-blue-200"
+            },
+            {
+                id: 2,
+                arabic: "اللَّهُ الصَّمَدُ ﴿٢﴾",
+                meaning: "Allah yang menjadi tumpuan sekalian makhluk, untuk memohon sebarang hajat.",
+                icon: "🤲✨",
+                animation: "anim-float",
+                color: "bg-fuchsia-100 border-fuchsia-200"
+            },
+            {
+                id: 3,
+                arabic: "لَمْ يَلِدْ وَلَمْ يُولَدْ ﴿٣﴾",
+                meaning: "Ia tiada beranak, dan Ia pula tidak diperanakkan.",
+                icon: "👨‍👦🚫",
+                animation: "anim-shake",
+                color: "bg-blue-100 border-blue-200"
+            },
+            {
+                id: 4,
+                arabic: "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴿٤﴾",
+                meaning: "Dan tidak ada sesiapapun yang setara denganNya.",
+                icon: "⚖️🚫",
+                animation: "anim-swing",
+                color: "bg-fuchsia-100 border-fuchsia-200"
+            }
+        ];
+
+        /* --- LOGIK TAB --- */
+        let gameInitialized = false;
+
+        function switchTab(tabId) {
+            // Sembunyikan semua konten
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Buang class active dari semua butang
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active', 'bg-violet-500', 'text-white');
+                el.classList.add('text-slate-600');
+            });
+
+            // Tunjuk konten yang dipilih
+            document.getElementById(tabId).classList.remove('hidden');
+            // Aktifkan butang
+            const btn = document.getElementById(`btn-${tabId.split('-')[1]}`);
+            btn.classList.add('active', 'bg-violet-500', 'text-white');
+            btn.classList.remove('text-slate-600');
+
+            // Jika tab kuiz dibuka, kita perlu inisialisasi permainan 
+            // kerana pengiraan kedudukan SVG bergantung pada elemen yang 'visible'
+            if (tabId === 'tab-kuiz' && !gameInitialized) {
+                setTimeout(() => {
+                    initGame();
+                    gameInitialized = true;
+                }, 50); // delay sikit untuk pastikan DOM dirender sepenuhnya
+            } else if (tabId === 'tab-kuiz') {
+                // Jika window resize berlaku masa tab disembunyikan, redraw garisan
+                setTimeout(redrawLines, 50);
+            }
+        }
+
+        /* --- LOGIK NOTA INTERAKTIF --- */
+        const notaContainer = document.getElementById('nota-container');
+        const modalInfo = document.getElementById('info-modal');
+
+        function renderNota() {
+            notaContainer.innerHTML = '';
+            surahData.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-center p-5 md:p-6 rounded-2xl shadow-sm border-2 transition-transform transform hover:-translate-y-1 hover:shadow-md ${item.color}`;
+                btn.onclick = () => openModal(item);
+                
+                btn.innerHTML = `
+                    <div class="arabic-text text-2xl md:text-3xl text-slate-800 font-bold mb-1">${item.arabic}</div>
+                    <div class="text-xs font-bold text-slate-500 mt-2 opacity-80"><i class="fas fa-hand-pointer mr-1"></i> Tekan untuk maksud & gambar</div>
+                `;
+                notaContainer.appendChild(btn);
+            });
+        }
+
+        function openModal(data) {
+            document.getElementById('modal-ayat-num').textContent = `Ayat ${data.id}`;
+            document.getElementById('modal-arabic').textContent = data.arabic;
+            document.getElementById('modal-meaning').textContent = data.meaning;
+            
+            const animDiv = document.getElementById('modal-animation');
+            animDiv.textContent = data.icon;
+            animDiv.className = `inline-block ${data.animation}`;
+
+            modalInfo.classList.remove('hidden');
+            setTimeout(() => {
+                modalInfo.classList.remove('opacity-0');
+                modalInfo.firstElementChild.classList.remove('scale-95');
+                modalInfo.firstElementChild.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalInfo.classList.add('opacity-0');
+            modalInfo.firstElementChild.classList.remove('scale-100');
+            modalInfo.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modalInfo.classList.add('hidden');
+                document.getElementById('modal-animation').className = "inline-block";
+            }, 300);
+        }
+
+        modalInfo.addEventListener('click', (e) => {
+            if(e.target === modalInfo) closeModal();
+        });
+
+
+        /* --- LOGIK PERMAINAN PADANAN GARISAN --- */
+        let score = 0;
+        let matchedPairs = []; 
+        let currentLines = []; 
+        let isDragging = false;
+        let startNodeInfo = null; 
+        let tempLine = null; 
+
+        const tabKuiz = document.getElementById('tab-kuiz');
+        const svgContainer = document.getElementById('lines-svg');
+        const colArab = document.getElementById('col-arab');
+        const colMaksud = document.getElementById('col-maksud');
+
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function initGame() {
+            score = 0;
+            matchedPairs = [];
+            currentLines = [];
+            svgContainer.innerHTML = '';
+            colArab.innerHTML = '';
+            colMaksud.innerHTML = '';
+            document.getElementById('score-display').textContent = score;
+
+            document.getElementById('win-modal').classList.add('hidden', 'opacity-0');
+            
+            const arabList = shuffleArray([...surahData]);
+            const maksudList = shuffleArray([...surahData]);
+
+            // Lajur Kiri
+            arabList.forEach(item => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'card-item relative bg-white rounded-2xl shadow-sm border-2 border-slate-200 p-4 flex items-center justify-between min-h-[80px]';
+                wrapper.id = `card-arab-${item.id}`;
+                
+                const text = document.createElement('span');
+                text.className = 'arabic-text text-xl md:text-2xl font-bold text-slate-800 w-full pr-4 text-right leading-loose';
+                text.textContent = item.arabic;
+                
+                const node = document.createElement('div');
+                node.className = 'node start-node absolute -right-3 md:-right-4 w-6 h-6 md:w-8 md:h-8 rounded-full bg-violet-400 border-4 border-white shadow-md cursor-pointer z-30';
+                node.dataset.id = item.id;
+                
+                wrapper.appendChild(text);
+                wrapper.appendChild(node);
+                colArab.appendChild(wrapper);
+                
+                node.addEventListener('mousedown', startDrag);
+                node.addEventListener('touchstart', startDrag, {passive: false});
+            });
+
+            // Lajur Kanan
+            maksudList.forEach(item => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'card-item relative bg-white rounded-2xl shadow-sm border-2 border-slate-200 p-3 md:p-4 flex items-center gap-3 min-h-[80px]';
+                wrapper.id = `card-maksud-${item.id}`;
+                
+                const node = document.createElement('div');
+                node.className = 'node end-node absolute -left-3 md:-left-4 w-6 h-6 md:w-8 md:h-8 rounded-full bg-fuchsia-400 border-4 border-white shadow-md z-30';
+                node.dataset.id = item.id;
+                
+                const icon = document.createElement('div');
+                icon.className = 'text-2xl md:text-3xl bg-slate-50 p-2 rounded-xl hidden md:block';
+                icon.textContent = item.icon.replace(/[^a-zA-Z0-9👍✨🚫☝️🤲👨‍👦⚖️]/g, ''); // bersihkan teks emoji
+                icon.textContent = item.icon; 
+                
+                const meaning = document.createElement('div');
+                meaning.className = 'text-xs md:text-sm font-bold text-slate-700 leading-tight w-full ml-4 md:ml-0 pl-1 md:pl-0';
+                meaning.textContent = item.meaning;
+
+                wrapper.appendChild(node);
+                wrapper.appendChild(icon);
+                wrapper.appendChild(meaning);
+                colMaksud.appendChild(wrapper);
+            });
+        }
+
+        function getNodeCenter(element) {
+            const boardRect = tabKuiz.getBoundingClientRect();
+            const elRect = element.getBoundingClientRect();
+            return {
+                x: elRect.left - boardRect.left + (elRect.width / 2),
+                y: elRect.top - boardRect.top + (elRect.height / 2)
+            };
+        }
+
+        function createLine(x1, y1, x2, y2, className) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            line.setAttribute('class', className);
+            svgContainer.appendChild(line);
+            return line;
+        }
+
+        function startDrag(e) {
+            e.preventDefault(); 
+            const node = e.target;
+            const id = parseInt(node.dataset.id);
+            if (matchedPairs.includes(id)) return;
+
+            isDragging = true;
+            node.classList.add('active');
+            
+            const center = getNodeCenter(node);
+            startNodeInfo = { id, node, x: center.x, y: center.y };
+            tempLine = createLine(center.x, center.y, center.x, center.y, 'line-temp');
+        }
+
+        function drag(e) {
+            if (!isDragging || !tempLine) return;
+            // Prevent default scroll on touch devices when drawing
+            if(e.type.includes('touch') && e.cancelable) e.preventDefault(); 
+
+            const boardRect = tabKuiz.getBoundingClientRect();
+            let clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            let clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+            tempLine.setAttribute('x2', clientX - boardRect.left);
+            tempLine.setAttribute('y2', clientY - boardRect.top);
+        }
+
+        function endDrag(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            startNodeInfo.node.classList.remove('active');
+
+            let clientX = e.type.includes('touch') ? e.changedTouches[0].clientX : e.clientX;
+            let clientY = e.type.includes('touch') ? e.changedTouches[0].clientY : e.clientY;
+
+            // Dapatkan elemen di bawah lokasi cursor/jari (abaikan garisan SVG kerana pointer-events: none)
+            const droppedElement = document.elementFromPoint(clientX, clientY);
+            let targetNode = droppedElement;
+            if(droppedElement && !droppedElement.classList.contains('end-node')) {
+                targetNode = droppedElement.closest('.end-node');
+            }
+
+            if (tempLine) { tempLine.remove(); tempLine = null; }
+
+            if (targetNode) {
+                const targetId = parseInt(targetNode.dataset.id);
+                if (targetId === startNodeInfo.id && !matchedPairs.includes(targetId)) {
+                    handleCorrectMatch(startNodeInfo.id, startNodeInfo.node, targetNode);
+                } else if (targetId !== startNodeInfo.id) {
+                    handleWrongMatch(targetId);
+                }
+            }
+            startNodeInfo = null;
+        }
+
+        function handleCorrectMatch(id, startNode, endNode) {
+            matchedPairs.push(id);
+            score++;
+            document.getElementById('score-display').textContent = score;
+
+            const startCenter = getNodeCenter(startNode);
+            const endCenter = getNodeCenter(endNode);
+            
+            const permLine = createLine(startCenter.x, startCenter.y, endCenter.x, endCenter.y, 'line-correct');
+            currentLines.push({ id, startNode, endNode, lineElement: permLine });
+
+            const arabCard = document.getElementById(`card-arab-${id}`);
+            const maksudCard = document.getElementById(`card-maksud-${id}`);
+            
+            [arabCard, maksudCard].forEach(card => {
+                card.classList.add('animate-success');
+                const nodeChild = card.querySelector('.node');
+                nodeChild.style.backgroundColor = '#8b5cf6'; // violet-500
+                nodeChild.style.cursor = 'default';
+            });
+
+            if (score === surahData.length) {
+                setTimeout(() => {
+                    const winModal = document.getElementById('win-modal');
+                    winModal.classList.remove('hidden');
+                    setTimeout(() => {
+                        winModal.classList.remove('opacity-0');
+                        winModal.firstElementChild.classList.remove('scale-95');
+                        winModal.firstElementChild.classList.add('scale-100');
+                    }, 10);
+                }, 600);
+            }
+        }
+
+        function handleWrongMatch(targetId) {
+            const targetCard = document.getElementById(`card-maksud-${targetId}`);
+            if (targetCard) {
+                targetCard.classList.add('animate-error');
+                setTimeout(() => { targetCard.classList.remove('animate-error'); }, 500);
+            }
+        }
+
+        function resetGame() { initGame(); }
+
+        function redrawLines() {
+            if (document.getElementById('tab-kuiz').classList.contains('hidden')) return;
+            currentLines.forEach(item => {
+                const startCenter = getNodeCenter(item.startNode);
+                const endCenter = getNodeCenter(item.endNode);
+                item.lineElement.setAttribute('x1', startCenter.x);
+                item.lineElement.setAttribute('y1', startCenter.y);
+                item.lineElement.setAttribute('x2', endCenter.x);
+                item.lineElement.setAttribute('y2', endCenter.y);
+            });
+        }
+
+        // Global Event Listeners
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, {passive: false});
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+        window.addEventListener('resize', redrawLines);
+
+        // Mula pada muatan awal
+        window.onload = () => {
+            renderNota();
+            // Tidak call initGame() sini kerana tab kuiz disembunyikan. Ia di call bila butang kuiz ditekan.
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ms" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Padanan Surah Al-Ma'un</title>
+    
+    <!-- Memuatkan Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Memuatkan fon Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdf4; /* Latar belakang hijau lembut/mint */
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bbf7d0' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            direction: rtl;
+        }
+
+        /* Animasi Gegar untuk Jawapan Salah */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .animate-error {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Animasi Pop untuk Jawapan Betul */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .animate-success {
+            animation: pop 0.4s ease-in-out;
+        }
+
+        /* Transisi lembut untuk butang */
+        .card-btn {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 text-slate-800 flex flex-col items-center">
+
+    <div class="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-emerald-300">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-emerald-400 to-teal-500 p-6 text-center text-white relative">
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-2 drop-shadow-md">Latihan Padankan Ayat</h1>
+            <p class="text-base md:text-lg font-semibold bg-white/20 inline-block px-4 py-1 rounded-full">Tekan ayat Arab, kemudian cari maksud & gambarnya yang betul!</p>
+            
+            <!-- Skor -->
+            <div class="mt-4 inline-flex items-center gap-2 bg-white text-teal-600 font-bold px-6 py-2 rounded-full shadow-md text-xl border-2 border-teal-200">
+                <span>Skor:</span>
+                <span id="score-display">0</span> / 7
+            </div>
+        </div>
+
+        <!-- Ruang Permainan (Game Board) -->
+        <div class="p-6 md:p-8 bg-slate-50">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+                
+                <!-- Lajur Kiri: Ayat Arab -->
+                <div>
+                    <h2 class="text-xl font-bold text-center mb-4 text-emerald-700 bg-emerald-100 py-2 rounded-xl">Ayat Al-Quran</h2>
+                    <div id="col-arab" class="space-y-4">
+                        <!-- Dimuatkan melalui JS -->
+                    </div>
+                </div>
+
+                <!-- Lajur Kanan: Maksud & Gambar -->
+                <div>
+                    <h2 class="text-xl font-bold text-center mb-4 text-sky-700 bg-sky-100 py-2 rounded-xl">Maksud & Gambar</h2>
+                    <div id="col-maksud" class="space-y-4">
+                        <!-- Dimuatkan melalui JS -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Modal Tahniah (Menang) -->
+    <div id="win-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-slate-900/70 backdrop-blur-sm transition-opacity opacity-0 duration-300">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-[90%] text-center border-4 border-yellow-400 transform scale-95 transition-transform duration-300">
+            <div class="text-6xl mb-4 animate-bounce">🎉🏆🌟</div>
+            <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Tahniah!</h2>
+            <p class="text-lg text-slate-600 mb-6 font-semibold">Awak berjaya memadankan kesemua ayat Surah Al-Ma'un dengan cemerlang!</p>
+            <button onclick="resetGame()" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold py-3 px-8 rounded-full hover:shadow-lg hover:scale-105 transition-all w-full text-lg shadow-md">
+                Main Semula 🔄
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Data ayat
+        const surahData = [
+            { id: 1, arabic: "أَرَءَيْتَ ٱلَّذِى يُكَذِّبُ بِٱلدِّينِ ﴿١﴾", meaning: "Tahukah engkau orang yang mendustakan agama?", icon: "🙅‍♂️📜" },
+            { id: 2, arabic: "فَذَٰلِكَ ٱلَّذِى يَدُعُّ ٱلْيَتِيمَ ﴿٢﴾", meaning: "Itulah orang yang mengherdik anak yatim.", icon: "😠👊👦" },
+            { id: 3, arabic: "وَلَا يَحُضُّ عَلَىٰ طَعَامِ ٱلْمِسْكِينِ ﴿٣﴾", meaning: "Dan tidak menggalakkan memberi makan kepada orang miskin.", icon: "🚫🍽️" },
+            { id: 4, arabic: "فَوَيْلٌ لِّلْمُصَلِّينَ ﴿٤﴾", meaning: "Maka celakalah bagi orang yang solat.", icon: "⚠️🧎" },
+            { id: 5, arabic: "ٱلَّذِينَ هُمْ عَن صَلَاتِهِمْ سَاهُونَ ﴿٥﴾", meaning: "(Iaitu) orang yang lalai terhadap solatnya.", icon: "⏰😴" },
+            { id: 6, arabic: "ٱلَّذِينَ هُمْ يُرَآءُونَ ﴿٦﴾", meaning: "Orang yang riak.", icon: "👀✨" },
+            { id: 7, arabic: "وَيَمْنَعُونَ ٱلْمَاعُونَ ﴿٧﴾", meaning: "Dan mereka enggan (menolong dengan) barang yang bermanfaat.", icon: "🤲🚫" }
+        ];
+
+        // State pembolehubah permainan
+        let selectedArabId = null;
+        let selectedMaksudId = null;
+        let matchedPairs = [];
+        let score = 0;
+
+        // Elemen DOM
+        const colArab = document.getElementById('col-arab');
+        const colMaksud = document.getElementById('col-maksud');
+        const scoreDisplay = document.getElementById('score-display');
+        const winModal = document.getElementById('win-modal');
+
+        // Fungsi untuk mengocak (shuffle) array
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Initialize / Reset Permainan
+        function initGame() {
+            // Kosongkan state
+            selectedArabId = null;
+            selectedMaksudId = null;
+            matchedPairs = [];
+            score = 0;
+            scoreDisplay.textContent = score;
+            
+            colArab.innerHTML = '';
+            colMaksud.innerHTML = '';
+
+            // Sembunyikan modal jika ia terbuka
+            winModal.classList.add('hidden', 'opacity-0');
+            winModal.firstElementChild.classList.remove('scale-100');
+            winModal.firstElementChild.classList.add('scale-95');
+
+            // Salin data dan kocak untuk kedua-dua lajur secara berasingan
+            const arabList = shuffleArray([...surahData]);
+            const maksudList = shuffleArray([...surahData]);
+
+            // Render Lajur Arab
+            arabList.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = `card-btn w-full text-right p-4 rounded-xl border-2 border-slate-200 bg-white shadow-sm hover:border-emerald-400 hover:shadow-md`;
+                btn.id = `arab-btn-${item.id}`;
+                btn.innerHTML = `<span class="arabic-text text-2xl md:text-3xl font-bold text-slate-800">${item.arabic}</span>`;
+                btn.onclick = () => handleArabClick(item.id, btn);
+                colArab.appendChild(btn);
+            });
+
+            // Render Lajur Maksud
+            maksudList.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = `card-btn w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white shadow-sm hover:border-sky-400 hover:shadow-md flex items-center gap-4`;
+                btn.id = `maksud-btn-${item.id}`;
+                btn.innerHTML = `
+                    <div class="text-4xl bg-slate-50 p-2 rounded-lg">${item.icon}</div>
+                    <div class="text-sm md:text-base font-bold text-slate-700 leading-tight">${item.meaning}</div>
+                `;
+                btn.onclick = () => handleMaksudClick(item.id, btn);
+                colMaksud.appendChild(btn);
+            });
+        }
+
+        // Kendalikan klik pada ayat Arab
+        function handleArabClick(id, element) {
+            // Abaikan jika sudah dipadankan
+            if (matchedPairs.includes(id)) return;
+
+            // Buang styling aktif dari butang Arab yang lain
+            document.querySelectorAll('#col-arab .card-btn').forEach(btn => {
+                if (!matchedPairs.includes(parseInt(btn.id.split('-')[2]))) {
+                    btn.classList.remove('border-emerald-500', 'bg-emerald-50', 'ring-4', 'ring-emerald-200');
+                    btn.classList.add('border-slate-200', 'bg-white');
+                }
+            });
+
+            // Set state dan tambah styling aktif
+            selectedArabId = id;
+            element.classList.remove('border-slate-200', 'bg-white');
+            element.classList.add('border-emerald-500', 'bg-emerald-50', 'ring-4', 'ring-emerald-200');
+
+            checkMatch();
+        }
+
+        // Kendalikan klik pada Maksud
+        function handleMaksudClick(id, element) {
+            // Abaikan jika sudah dipadankan
+            if (matchedPairs.includes(id)) return;
+
+            // Buang styling aktif dari butang Maksud yang lain
+            document.querySelectorAll('#col-maksud .card-btn').forEach(btn => {
+                if (!matchedPairs.includes(parseInt(btn.id.split('-')[2]))) {
+                    btn.classList.remove('border-sky-500', 'bg-sky-50', 'ring-4', 'ring-sky-200');
+                    btn.classList.add('border-slate-200', 'bg-white');
+                }
+            });
+
+            // Set state dan tambah styling aktif
+            selectedMaksudId = id;
+            element.classList.remove('border-slate-200', 'bg-white');
+            element.classList.add('border-sky-500', 'bg-sky-50', 'ring-4', 'ring-sky-200');
+
+            checkMatch();
+        }
+
+        // Semak adakah pilihan padan
+        function checkMatch() {
+            if (selectedArabId && selectedMaksudId) {
+                const arabBtn = document.getElementById(`arab-btn-${selectedArabId}`);
+                const maksudBtn = document.getElementById(`maksud-btn-${selectedMaksudId}`);
+
+                if (selectedArabId === selectedMaksudId) {
+                    // JAWAPAN BETUL
+                    matchedPairs.push(selectedArabId);
+                    score++;
+                    scoreDisplay.textContent = score;
+
+                    // Penggayaan berjaya
+                    [arabBtn, maksudBtn].forEach(btn => {
+                        btn.classList.remove('ring-4', 'border-emerald-500', 'border-sky-500', 'bg-emerald-50', 'bg-sky-50', 'cursor-pointer', 'hover:shadow-md');
+                        btn.classList.add('border-green-500', 'bg-green-100', 'opacity-70', 'animate-success');
+                        btn.onclick = null; // Disable butang
+                    });
+
+                    // Cek jika menang
+                    if (score === surahData.length) {
+                        setTimeout(showWinModal, 600);
+                    }
+                } else {
+                    // JAWAPAN SALAH
+                    [arabBtn, maksudBtn].forEach(btn => {
+                        btn.classList.add('border-red-500', 'bg-red-50', 'animate-error');
+                        btn.classList.remove('border-emerald-500', 'border-sky-500', 'ring-4', 'ring-emerald-200', 'ring-sky-200');
+                    });
+
+                    // Reset gaya selepas animasi tamat
+                    setTimeout(() => {
+                        [arabBtn, maksudBtn].forEach(btn => {
+                            btn.classList.remove('border-red-500', 'bg-red-50', 'animate-error');
+                            btn.classList.add('border-slate-200', 'bg-white');
+                        });
+                    }, 600);
+                }
+
+                // Reset pilihan semasa
+                selectedArabId = null;
+                selectedMaksudId = null;
+            }
+        }
+
+        function showWinModal() {
+            winModal.classList.remove('hidden');
+            setTimeout(() => {
+                winModal.classList.remove('opacity-0');
+                winModal.firstElementChild.classList.remove('scale-95');
+                winModal.firstElementChild.classList.add('scale-100');
+            }, 10);
+        }
+
+        function resetGame() {
+            initGame();
+        }
+
+        // Mulakan permainan bila laman dimuatkan
+        window.onload = initGame;
+    </script>
+</body>
+</html>

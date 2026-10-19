@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Interaktif: Pengangkutan (Bertab)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            direction: rtl;
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom radio button styles for better tap targets */
+        .radio-label input[type="radio"]:checked + div {
+            background-color: #DBEAFE; /* tailwind blue-100 */
+            border-color: #3B82F6; /* tailwind blue-500 */
+            color: #1E3A8A; /* tailwind blue-900 */
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen font-sans text-gray-800">
+
+    <div class="max-w-4xl mx-auto p-4 py-8">
+        
+        <!-- Header -->
+        <div class="bg-blue-600 text-white rounded-t-2xl p-6 text-center shadow-md relative z-10">
+            <h1 class="text-4xl arabic-text font-bold mb-2">وَسَائِلُ النَّقْلِ</h1>
+            <h2 class="text-xl font-semibold">Latihan Bahasa Arab Tahun 6 (Unit 3)</h2>
+            <p class="text-sm text-blue-200 mt-2">Pilih tab di bawah untuk menjawab latihan mengikut muka surat.</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="flex overflow-x-auto bg-white shadow-md rounded-b-2xl mb-6 scrollbar-hide">
+            <button onclick="openTab(event, 'tab1')" class="tab-btn flex-1 py-4 px-4 text-center font-medium text-blue-600 border-b-4 border-blue-600 whitespace-nowrap hover:bg-blue-50 transition-colors">
+                Muka 1: Kosa Kata
+            </button>
+            <button onclick="openTab(event, 'tab2')" class="tab-btn flex-1 py-4 px-4 text-center font-medium text-gray-500 border-b-4 border-transparent hover:bg-blue-50 hover:text-blue-600 whitespace-nowrap transition-colors">
+                Muka 2: Kategori
+            </button>
+            <button onclick="openTab(event, 'tab3')" class="tab-btn flex-1 py-4 px-4 text-center font-medium text-gray-500 border-b-4 border-transparent hover:bg-blue-50 hover:text-blue-600 whitespace-nowrap transition-colors">
+                Muka 3: قِطَارٌ
+            </button>
+            <button onclick="openTab(event, 'tab4')" class="tab-btn flex-1 py-4 px-4 text-center font-medium text-gray-500 border-b-4 border-transparent hover:bg-blue-50 hover:text-blue-600 whitespace-nowrap transition-colors">
+                Muka 4: سَفِينَةٌ
+            </button>
+        </div>
+
+        <!-- TAB 1: Kosa Kata -->
+        <div id="tab1" class="tab-content active bg-white rounded-2xl shadow-md p-6 md:p-8">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Kenali Kenderaan</h3>
+                <p class="text-gray-500">Pilih padanan bahasa Melayu yang betul bagi perkataan Arab berikut.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="q-container-1">
+                <!-- Question 1 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <div class="text-center mb-4">
+                        <span class="arabic-text text-4xl text-blue-700 font-bold">شَاحِنَةٌ</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q1" value="wrong" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Bas 🚌</div>
+                        </label>
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q1" value="correct" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Lori 🚚</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <div class="text-center mb-4">
+                        <span class="arabic-text text-4xl text-blue-700 font-bold">دَرَاجَةٌ نَارِيَّةٌ</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q2" value="correct" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Motosikal 🏍️</div>
+                        </label>
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q2" value="wrong" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Basikal 🚲</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <div class="text-center mb-4">
+                        <span class="arabic-text text-4xl text-blue-700 font-bold">طَائِرَةٌ</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q3" value="wrong" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Helikopter 🚁</div>
+                        </label>
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q3" value="correct" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">K. Terbang ✈️</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <div class="text-center mb-4">
+                        <span class="arabic-text text-4xl text-blue-700 font-bold">سَيَّارَةُ أُجْرَةٍ</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q4" value="correct" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Teksi 🚕</div>
+                        </label>
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q4" value="wrong" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Kereta 🚗</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <div class="text-center mb-4">
+                        <span class="arabic-text text-4xl text-blue-700 font-bold">حَافِلَةٌ</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q5" value="correct" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Bas 🚌</div>
+                        </label>
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q5" value="wrong" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Lori 🚚</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <div class="text-center mb-4">
+                        <span class="arabic-text text-4xl text-blue-700 font-bold">مِرْوَحِيَّةٌ</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q6" value="wrong" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">K. Terbang ✈️</div>
+                        </label>
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q6" value="correct" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Helikopter 🚁</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <div class="text-center mb-4">
+                        <span class="arabic-text text-4xl text-blue-700 font-bold">سَفِينَةٌ</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q7" value="correct" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Kapal 🚢</div>
+                        </label>
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q7" value="wrong" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Bot 🚤</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <div class="text-center mb-4">
+                        <span class="arabic-text text-4xl text-blue-700 font-bold">قِطَارٌ</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q8" value="correct" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Kereta Api 🚂</div>
+                        </label>
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q8" value="wrong" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Teksi 🚕</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 9 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <div class="text-center mb-4">
+                        <span class="arabic-text text-4xl text-blue-700 font-bold">قَارِبٌ</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q9" value="correct" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Bot 🚤</div>
+                        </label>
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q9" value="wrong" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Kapal 🚢</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 10 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                    <div class="text-center mb-4">
+                        <span class="arabic-text text-4xl text-blue-700 font-bold">سَيَّارَةٌ</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q10" value="wrong" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Basikal 🚲</div>
+                        </label>
+                        <label class="radio-label cursor-pointer">
+                            <input type="radio" name="q10" value="correct" class="hidden">
+                            <div class="p-3 border-2 border-gray-300 rounded-lg text-center hover:bg-gray-100 transition-colors">Kereta 🚗</div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="checkAnswers('tab1', 10)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors shadow-lg">Semak Jawapan</button>
+            </div>
+            <div id="result-tab1" class="mt-4 text-center font-bold text-lg hidden"></div>
+        </div>
+
+        <!-- TAB 2: Kategori Tempat -->
+        <div id="tab2" class="tab-content bg-white rounded-2xl shadow-md p-6 md:p-8">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Kategori Tempat</h3>
+                <p class="text-gray-500">Pilih tempat yang betul bagi setiap kenderaan (Udara, Laut, Darat).</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Cat 1 -->
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-4xl">✈️</div>
+                        <div class="arabic-text text-2xl font-bold text-blue-800">طَائِرَةٌ</div>
+                    </div>
+                    <select id="cat-q1" class="arabic-text text-xl p-2 border-2 border-gray-300 rounded-lg bg-white outline-none focus:border-blue-500">
+                        <option value="">-- Pilih --</option>
+                        <option value="air">فِي الْجَوِّ (Udara)</option>
+                        <option value="sea">فِي الْبَحْرِ (Laut)</option>
+                        <option value="land">فِي الْبَرِّ (Darat)</option>
+                    </select>
+                </div>
+                <!-- Cat 2 -->
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-4xl">🚢</div>
+                        <div class="arabic-text text-2xl font-bold text-blue-800">سَفِينَةٌ</div>
+                    </div>
+                    <select id="cat-q2" class="arabic-text text-xl p-2 border-2 border-gray-300 rounded-lg bg-white outline-none focus:border-blue-500">
+                        <option value="">-- Pilih --</option>
+                        <option value="air">فِي الْجَوِّ (Udara)</option>
+                        <option value="sea">فِي الْبَحْرِ (Laut)</option>
+                        <option value="land">فِي الْبَرِّ (Darat)</option>
+                    </select>
+                </div>
+                <!-- Cat 3 -->
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-4xl">🚂</div>
+                        <div class="arabic-text text-2xl font-bold text-blue-800">قِطَارٌ</div>
+                    </div>
+                    <select id="cat-q3" class="arabic-text text-xl p-2 border-2 border-gray-300 rounded-lg bg-white outline-none focus:border-blue-500">
+                        <option value="">-- Pilih --</option>
+                        <option value="air">فِي الْجَوِّ (Udara)</option>
+                        <option value="sea">فِي الْبَحْرِ (Laut)</option>
+                        <option value="land">فِي الْبَرِّ (Darat)</option>
+                    </select>
+                </div>
+                <!-- Cat 4 -->
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-4xl">🚌</div>
+                        <div class="arabic-text text-2xl font-bold text-blue-800">حَافِلَةٌ</div>
+                    </div>
+                    <select id="cat-q4" class="arabic-text text-xl p-2 border-2 border-gray-300 rounded-lg bg-white outline-none focus:border-blue-500">
+                        <option value="">-- Pilih --</option>
+                        <option value="air">فِي الْجَوِّ (Udara)</option>
+                        <option value="sea">فِي الْبَحْرِ (Laut)</option>
+                        <option value="land">فِي الْبَرِّ (Darat)</option>
+                    </select>
+                </div>
+                <!-- Cat 5 -->
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-4xl">🚁</div>
+                        <div class="arabic-text text-2xl font-bold text-blue-800">مِرْوَحِيَّةٌ</div>
+                    </div>
+                    <select id="cat-q5" class="arabic-text text-xl p-2 border-2 border-gray-300 rounded-lg bg-white outline-none focus:border-blue-500">
+                        <option value="">-- Pilih --</option>
+                        <option value="air">فِي الْجَوِّ (Udara)</option>
+                        <option value="sea">فِي الْبَحْرِ (Laut)</option>
+                        <option value="land">فِي الْبَرِّ (Darat)</option>
+                    </select>
+                </div>
+                <!-- Cat 6 -->
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-4xl">🚤</div>
+                        <div class="arabic-text text-2xl font-bold text-blue-800">قَارِبٌ</div>
+                    </div>
+                    <select id="cat-q6" class="arabic-text text-xl p-2 border-2 border-gray-300 rounded-lg bg-white outline-none focus:border-blue-500">
+                        <option value="">-- Pilih --</option>
+                        <option value="air">فِي الْجَوِّ (Udara)</option>
+                        <option value="sea">فِي الْبَحْرِ (Laut)</option>
+                        <option value="land">فِي الْبَرِّ (Darat)</option>
+                    </select>
+                </div>
+                <!-- Cat 7 -->
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-4xl">🏍️</div>
+                        <div class="arabic-text text-2xl font-bold text-blue-800">دَرَاجَةٌ نَارِيَّةٌ</div>
+                    </div>
+                    <select id="cat-q7" class="arabic-text text-xl p-2 border-2 border-gray-300 rounded-lg bg-white outline-none focus:border-blue-500">
+                        <option value="">-- Pilih --</option>
+                        <option value="air">فِي الْجَوِّ (Udara)</option>
+                        <option value="sea">فِي الْبَحْرِ (Laut)</option>
+                        <option value="land">فِي الْبَرِّ (Darat)</option>
+                    </select>
+                </div>
+                <!-- Cat 8 -->
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-4xl">🚕</div>
+                        <div class="arabic-text text-2xl font-bold text-blue-800">سَيَّارَةُ أُجْرَةٍ</div>
+                    </div>
+                    <select id="cat-q8" class="arabic-text text-xl p-2 border-2 border-gray-300 rounded-lg bg-white outline-none focus:border-blue-500">
+                        <option value="">-- Pilih --</option>
+                        <option value="air">فِي الْجَوِّ (Udara)</option>
+                        <option value="sea">فِي الْبَحْرِ (Laut)</option>
+                        <option value="land">فِي الْبَرِّ (Darat)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="checkCategories()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors shadow-lg">Semak Jawapan</button>
+            </div>
+            <div id="result-tab2" class="mt-4 text-center font-bold text-lg hidden"></div>
+        </div>
+
+        <!-- TAB 3: Latihan Kereta Api (Qitar) -->
+        <div id="tab3" class="tab-content bg-white rounded-2xl shadow-md p-6 md:p-8">
+            <div class="text-center mb-6">
+                <div class="text-5xl mb-2">🚂</div>
+                <h3 class="text-3xl arabic-text font-bold text-gray-800">قِطَارٌ</h3>
+                <p class="text-gray-500 mt-2">Lengkapkan ayat-ayat di bawah.</p>
+            </div>
+
+            <div class="space-y-6 max-w-2xl mx-auto text-right" id="q-container-3">
+                <!-- Blank 1 -->
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 flex flex-col items-end">
+                    <p class="arabic-text text-3xl mb-4 leading-loose">
+                        <span class="inline-block w-24 border-b-2 border-dashed border-gray-500 text-center text-blue-600" id="blank-3-1">...</span> قِطَارٌ
+                    </p>
+                    <div class="flex space-x-3 space-x-reverse" dir="rtl">
+                        <button onclick="fillBlank('blank-3-1', 'هَذَا', 'correct')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">هَذَا</button>
+                        <button onclick="fillBlank('blank-3-1', 'هَذِهِ', 'wrong')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">هَذِهِ</button>
+                    </div>
+                </div>
+
+                <!-- Blank 2 -->
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 flex flex-col items-end">
+                    <p class="arabic-text text-3xl mb-4 leading-loose">
+                        هَذَا قِطَارٌ <span class="inline-block w-24 border-b-2 border-dashed border-gray-500 text-center text-blue-600" id="blank-3-2">...</span>
+                    </p>
+                    <div class="flex space-x-3 space-x-reverse" dir="rtl">
+                        <button onclick="fillBlank('blank-3-2', 'جَدِيدٌ', 'correct')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">جَدِيدٌ</button>
+                        <button onclick="fillBlank('blank-3-2', 'قَدِيمٌ', 'wrong')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">قَدِيمٌ</button>
+                    </div>
+                </div>
+
+                <!-- Blank 3 -->
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 flex flex-col items-end">
+                    <p class="arabic-text text-3xl mb-4 leading-loose">
+                        مَا أَسْرَعَ هَذَا <span class="inline-block w-32 border-b-2 border-dashed border-gray-500 text-center text-blue-600" id="blank-3-3">...</span>!
+                    </p>
+                    <div class="flex space-x-3 space-x-reverse" dir="rtl">
+                        <button onclick="fillBlank('blank-3-3', 'السَّفِينَةَ', 'wrong')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">السَّفِينَةَ</button>
+                        <button onclick="fillBlank('blank-3-3', 'الْقِطَارَ', 'correct')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">الْقِطَارَ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="checkBlanks('tab3', 3)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors shadow-lg">Semak Jawapan</button>
+            </div>
+            <div id="result-tab3" class="mt-4 text-center font-bold text-lg hidden"></div>
+        </div>
+
+        <!-- TAB 4: Latihan Kapal (Safinah) -->
+        <div id="tab4" class="tab-content bg-white rounded-2xl shadow-md p-6 md:p-8">
+            <div class="text-center mb-6">
+                <div class="text-5xl mb-2">🚢</div>
+                <h3 class="text-3xl arabic-text font-bold text-gray-800">سَفِينَةٌ</h3>
+                <p class="text-gray-500 mt-2">Lengkapkan ayat-ayat di bawah.</p>
+            </div>
+
+            <div class="space-y-6 max-w-2xl mx-auto text-right" id="q-container-4">
+                <!-- Blank 1 -->
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 flex flex-col items-end">
+                    <p class="arabic-text text-3xl mb-4 leading-loose">
+                        <span class="inline-block w-24 border-b-2 border-dashed border-gray-500 text-center text-blue-600" id="blank-4-1">...</span> سَفِينَةٌ
+                    </p>
+                    <div class="flex space-x-3 space-x-reverse" dir="rtl">
+                        <button onclick="fillBlank('blank-4-1', 'هَذَا', 'wrong')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">هَذَا</button>
+                        <button onclick="fillBlank('blank-4-1', 'هَذِهِ', 'correct')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">هَذِهِ</button>
+                    </div>
+                </div>
+
+                <!-- Blank 2 -->
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 flex flex-col items-end">
+                    <p class="arabic-text text-3xl mb-4 leading-loose">
+                        أُسَافِرُ بِـ<span class="inline-block w-32 border-b-2 border-dashed border-gray-500 text-center text-blue-600" id="blank-4-2">...</span> إِلَى الْقَرْيَةِ
+                    </p>
+                    <div class="flex space-x-3 space-x-reverse" dir="rtl">
+                        <button onclick="fillBlank('blank-4-2', 'السَّفِينَةِ', 'correct')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">السَّفِينَةِ</button>
+                        <button onclick="fillBlank('blank-4-2', 'الدَّرَاجَةِ', 'wrong')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">الدَّرَاجَةِ</button>
+                    </div>
+                </div>
+
+                <!-- Blank 3 -->
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 flex flex-col items-end">
+                    <p class="arabic-text text-3xl mb-4 leading-loose">
+                        مَا أَكْبَرَ هَذِهِ <span class="inline-block w-32 border-b-2 border-dashed border-gray-500 text-center text-blue-600" id="blank-4-3">...</span>!
+                    </p>
+                    <div class="flex space-x-3 space-x-reverse" dir="rtl">
+                        <button onclick="fillBlank('blank-4-3', 'السَّفِينَةَ', 'correct')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">السَّفِينَةَ</button>
+                        <button onclick="fillBlank('blank-4-3', 'الْقِطَارَ', 'wrong')" class="arabic-text text-xl bg-white border border-gray-300 py-2 px-6 rounded-lg hover:bg-blue-100 transition-colors">الْقِطَارَ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="checkBlanks('tab4', 3)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors shadow-lg">Semak Jawapan</button>
+            </div>
+            <div id="result-tab4" class="mt-4 text-center font-bold text-lg hidden"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // State for blanks
+        const blankStates = {};
+
+        // Tab Navigation Function
+        function openTab(evt, tabId) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+
+            // Remove active styling from all buttons
+            const tabBtns = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("text-blue-600", "border-blue-600");
+                tabBtns[i].classList.add("text-gray-500", "border-transparent");
+            }
+
+            // Show the current tab and add active styling
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.remove("text-gray-500", "border-transparent");
+            evt.currentTarget.classList.add("text-blue-600", "border-blue-600");
+        }
+
+        // Check Radio Button Answers (Tab 1)
+        function checkAnswers(tabId, totalQuestions) {
+            let score = 0;
+            const container = document.getElementById(`q-container-1`);
+            
+            for (let i = 1; i <= totalQuestions; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected && selected.value === 'correct') {
+                    score++;
+                }
+            }
+
+            const resultDiv = document.getElementById(`result-${tabId}`);
+            resultDiv.classList.remove('hidden', 'text-green-600', 'text-red-600');
+            
+            if (score === totalQuestions) {
+                resultDiv.innerHTML = `🌟 Tahniah! Semua betul (${score}/${totalQuestions}) 🌟`;
+                resultDiv.classList.add('text-green-600');
+            } else {
+                resultDiv.innerHTML = `Anda menjawab ${score}/${totalQuestions} dengan betul. Cuba perbaiki lagi!`;
+                resultDiv.classList.add('text-red-600');
+            }
+        }
+
+        // Check Category Dropdowns (Tab 2)
+        function checkCategories() {
+            const answers = {
+                'cat-q1': 'air',  // Airplane -> Air
+                'cat-q2': 'sea',  // Ship -> Sea
+                'cat-q3': 'land', // Train -> Land
+                'cat-q4': 'land', // Bus -> Land
+                'cat-q5': 'air',  // Helicopter -> Air
+                'cat-q6': 'sea',  // Boat -> Sea
+                'cat-q7': 'land', // Motorcycle -> Land
+                'cat-q8': 'land'  // Taxi -> Land
+            };
+
+            let score = 0;
+            const total = Object.keys(answers).length;
+
+            for (const [id, correctVal] of Object.entries(answers)) {
+                const el = document.getElementById(id);
+                if (el.value === correctVal) {
+                    score++;
+                    el.classList.remove('border-red-500');
+                    el.classList.add('border-green-500', 'bg-green-50');
+                } else if (el.value !== "") {
+                    el.classList.remove('border-green-500');
+                    el.classList.add('border-red-500', 'bg-red-50');
+                }
+            }
+
+            const resultDiv = document.getElementById('result-tab2');
+            resultDiv.classList.remove('hidden', 'text-green-600', 'text-red-600');
+            
+            if (score === total) {
+                resultDiv.innerHTML = `🌟 Hebat! Semua padanan kategori tepat (${score}/${total}) 🌟`;
+                resultDiv.classList.add('text-green-600');
+            } else {
+                resultDiv.innerHTML = `Markah: ${score}/${total}. Sila semak semula jawapan yang salah (ditanda merah).`;
+                resultDiv.classList.add('text-red-600');
+            }
+        }
+
+        // Handle Fill in the Blanks (Tab 3 & 4)
+        function fillBlank(blankId, text, isCorrect) {
+            const blankEl = document.getElementById(blankId);
+            blankEl.textContent = text;
+            blankEl.classList.remove('border-dashed', 'border-gray-500', 'text-blue-600');
+            blankEl.classList.add('border-solid', 'border-blue-600', 'text-gray-900', 'font-bold');
+            
+            // Store the state
+            blankStates[blankId] = isCorrect;
+        }
+
+        function checkBlanks(tabId, totalBlanks) {
+            let score = 0;
+            let answered = 0;
+            let tabNum = tabId === 'tab3' ? 3 : 4;
+
+            for(let i=1; i<=totalBlanks; i++) {
+                const blankId = `blank-${tabNum}-${i}`;
+                if (blankStates[blankId] !== undefined) {
+                    answered++;
+                    if (blankStates[blankId] === 'correct') {
+                        score++;
+                        document.getElementById(blankId).classList.add('text-green-600', 'border-green-600');
+                    } else {
+                        document.getElementById(blankId).classList.add('text-red-600', 'border-red-600');
+                    }
+                }
+            }
+
+            const resultDiv = document.getElementById(`result-${tabId}`);
+            resultDiv.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-orange-600');
+
+            if (answered < totalBlanks) {
+                resultDiv.innerHTML = `Sila lengkapkan semua tempat kosong.`;
+                resultDiv.classList.add('text-orange-600');
+                return;
+            }
+
+            if (score === totalBlanks) {
+                resultDiv.innerHTML = `🌟 Mumtaz (Cemerlang)! Ayat dilengkapkan dengan betul. 🌟`;
+                resultDiv.classList.add('text-green-600');
+            } else {
+                resultDiv.innerHTML = `Markah: ${score}/${totalBlanks}. Terdapat jawapan yang kurang tepat.`;
+                resultDiv.classList.add('text-red-600');
+            }
+        }
+
+    </script>
+</body>
+</html>
